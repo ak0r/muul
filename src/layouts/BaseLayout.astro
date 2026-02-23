@@ -1,0 +1,41 @@
+---
+import { Font } from 'astro:assets';
+import "@/styles/global.css"
+---
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content={Astro.generator} />
+    <!-- Favicon -->
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon-light.ico" type="image/x-icon">
+
+    <!-- SEO slot - pages inject SEO component here -->
+    <slot name="seo" />
+
+    <!-- Additional head content -->
+    <slot name="head" />
+
+    <!-- Preload fonts -->
+    <Font cssVariable="--font-headings" preload />
+    <Font cssVariable="--font-primary" preload />
+    <Font cssVariable="--font-secondary" preload />
+    <Font cssVariable="--font-code" preload />
+    <Font cssVariable="--font-brand" preload />
+
+    <link rel="sitemap" href="/sitemap-index.xml" />
+  </head>
+  <body>
+
+    <main class="container">
+      <slot />
+    </main>
+
+    <!-- Additional page-specific scripts -->
+    <slot name="scripts" />
+  </body>
+</html>
