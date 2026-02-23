@@ -2,22 +2,26 @@
 @import './theme.css';
 
 @layer base {
+  
+  *, *::before, *::after {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
   body {
     font-family: var(--font-primary);
+  }
+
+  html[data-theme="dark"] {
+    color-scheme: dark;
+    background-color: #09090b;
+    color: #fafafa;
   }
 }
 
 @layer components {
   :root {
-    --container-max: 1280px;
     --article-max: 960px;
-  }
-  
-  .container {
-    width: 100%;
-    max-width: var(--container-max);
-    margin-inline: auto;
-    padding-inline: var(--container-pad);
   }
 
   .article {

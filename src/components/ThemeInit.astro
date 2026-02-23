@@ -1,0 +1,12 @@
+---
+---
+<script is:inline>
+  // Prevent FOUC - apply theme before rendering.
+  (function() {
+    const stored = localStorage.getItem("theme");
+    if (stored) {
+      document.documentElement.style.colorScheme = stored;
+      document.documentElement.setAttribute('data-theme', stored);
+    }
+  })();
+</script>

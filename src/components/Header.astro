@@ -3,14 +3,133 @@ import { siteConfig } from "@/site.config";
 ---
 
 <header>
-  <nav>
-    <a href="/" class="brand">{siteConfig.title}</a>
-    <ul>
-      {siteConfig.navigation.map((item) => (
-        <li>
+  <div class="container">
+    <nav>
+      <a href="/" aria-label={`${siteConfig.title} home`} class="brand">{siteConfig.title}</a>
+
+      <!-- Desktop nav -->
+      <div class="nav-desktop">
+        {siteConfig.navigation.map((item) => (
           <a href={item.url}>{item.title}</a>
-        </li>
+        ))}
+        <button
+          id="theme-toggle"
+          class="outline small"
+          aria-label="Toggle theme"
+          title="Toggle light/dark theme"
+        >◐</button>
+      </div>
+
+      <!-- Mobile hamburger -->
+      <button
+        id="nav-toggle"
+        class="outline small nav-mobile-toggle"
+        aria-label="Toggle menu"
+        aria-expanded="false"
+        aria-controls="nav-mobile"
+      >☰</button>
+    </nav>
+  </div>
+
+  <!-- Mobile dropdown — outside container so content can be padded separately -->
+  <div id="nav-mobile" class="nav-mobile nav-mobile--hidden">
+    <div class="container">
+      {siteConfig.navigation.map((item) => (
+        <a href={item.url}>{item.title}</a>
       ))}
-    </ul>
-  </nav>
+      <button
+        id="theme-toggle-mobile"
+        class="outline small"
+        aria-label="Toggle theme"
+      >◐ Toggle theme</button>
+    </div>
+  </div>
 </header>
+
+<script>
+  // Theme toggle — targets <body> as required by Oat
+  function toggleTheme() {
+    var cs = document.documentElement.style.colorScheme;
+    var isDark = cs === 'dark' || (!cs && matchMedia('(prefers-color-scheme: dark)').matches);
+    var theme = isDark ? 'light' : 'dark';
+    document.documentElement.style.colorScheme = theme;
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+  }
+
+  document.getElementById("theme-toggle")?.addEventListener("click", toggleTheme);
+  document.getElementById("theme-toggle-mobile")?.addEventListener("click", toggleTheme);
+
+  // Mobile nav toggle
+  const navToggle = document.getElementById("nav-toggle");
+  const navMobile = document.getElementById("nav-mobile");
+
+  navToggle?.addEventListener("click", () => {
+    const isOpen = !navMobile?.classList.contains("nav-mobile--hidden");
+    if (isOpen) {
+      navMobile?.classList.add("nav-mobile--hidden");
+      navToggle.setAttribute("aria-expanded", "false");
+    } else {
+      navMobile?.classList.remove("nav-mobile--hidden");
+      navToggle.setAttribute("aria-expanded", "true");
+    }
+  });
+</script>
+
+<style>
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid var(--border);
+    background-color: var(--background);
+  }
+
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-block: var(--space-3);
+  }
+
+  .brand {
+    font-family: var(--font-brand);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .nav-desktop {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .nav-mobile-toggle {
+    display: none;
+  }
+
+  .nav-mobile {
+    border-top: 1px solid var(--border);
+  }
+
+  .nav-mobile .container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding-block: var(--space-3);
+  }
+
+  .nav-mobile--hidden {
+    display: none;
+  }
+
+  @media (max-width: 640px) {
+    .nav-desktop {
+      display: none;
+    }
+
+    .nav-mobile-toggle {
+      display: inline-flex;
+    }
+  }
+</style>
