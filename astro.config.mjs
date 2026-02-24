@@ -15,14 +15,14 @@ export default defineConfig({
     contentIntellisense: true,
     fonts: [
       {
-        name: "Inter",
+        name: "Newsreader",
         cssVariable: "--font-headings",
         provider: fontProviders.fontsource(),
         weights: [400, 500, 600, 700],
         fallbacks: ["sans-serif"],
       },
       {
-        name: "Newsreader",
+        name: "Inter",
         cssVariable: "--font-primary",
         provider: fontProviders.fontsource(),
         weights: [400, 500, 600, 700],

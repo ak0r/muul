@@ -1,27 +1,27 @@
 @layer theme {
   :root {
     color-scheme: light dark;
-    --background: light-dark(#fff, #09090b);
-    --foreground: light-dark(#09090b, #fafafa);
-    --card: light-dark(#fff, #18181b);
-    --card-foreground: light-dark(#09090b, #fafafa);
-    --primary: light-dark(#574747, #fafafa);
-    --primary-foreground: light-dark(#fafafa, #18181b);
-    --secondary: light-dark(#f4f4f5, #27272a);
-    --secondary-foreground: light-dark(#574747, #fafafa);
-    --muted: light-dark(#f4f4f5, #27272a);
-    --muted-foreground: light-dark(#71717a, #a1a1aa);
-    --faint: light-dark(#fafafa, #1e1e21);
-    --faint-foreground: light-dark(#a1a1aa, #71717a);
+    --background: light-dark(#FFFCF0, #100F0F);
+    --foreground: light-dark(#100F0F, #FFFCF0);
+    --card: light-dark(#F2F0E5, #1C1B1A);
+    --card-foreground: light-dark(#100F0F, #CECDC3);
+    --primary: light-dark(#24837B, #3AA99F);
+    --primary-foreground: light-dark(#FFFCF0, #100F0F);
+    --secondary: light-dark(#205EA6, #4385BE);
+    --secondary-foreground: light-dark(#FFFCF0, #100F0F);
+    --muted: light-dark(#DAD8CE, #343331);
+    --muted-foreground: light-dark(#6F6E69, #878580);
+    --faint: light-dark(#CECDC3, #403E3C);
+    --faint-foreground: light-dark(#575653, #B7B5AC);
     --accent: light-dark(#f4f4f5, #27272a);
-    --danger: light-dark(#d32f2f, #f4807b);
+    --danger: light-dark(#AF3029, #D14D41);
     --danger-foreground: light-dark(#fafafa, #18181b);
-    --success: light-dark(#008032, #6cc070);
+    --success: light-dark(#66800B, #879A39);
     --success-foreground: light-dark(#fafafa, #18181b);
-    --warning: light-dark(#a65b00, #f0a030);
+    --warning: light-dark(#BC5215, #DA702C);
     --warning-foreground: #09090b;
-    --border: light-dark(#d4d4d8, #52525b);
+    --border: light-dark(#E6E4D9, #282726);
     --input: light-dark(#d4d4d8, #52525b);
-    --ring: light-dark(#574747, #d4d4d8);
+    --ring: light-dark(#E6E4D9, #282726);
   }
 }

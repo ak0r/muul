@@ -10,7 +10,7 @@ import { siteConfig } from "@/site.config";
       <!-- Desktop nav -->
       <div class="nav-desktop">
         {siteConfig.navigation.map((item) => (
-          <a href={item.url}>{item.title}</a>
+          <a href={item.url} class="nav-link">{item.title}</a>
         ))}
         <button
           id="theme-toggle"
@@ -83,6 +83,7 @@ import { siteConfig } from "@/site.config";
     z-index: 100;
     border-bottom: 1px solid var(--border);
     background-color: var(--background);
+    margin-bottom: var(--space-10);
   }
 
   nav {
@@ -92,10 +93,19 @@ import { siteConfig } from "@/site.config";
     padding-block: var(--space-3);
   }
 
+  .nav-link {
+    font-size: large;
+  }
+
   .brand {
     font-family: var(--font-brand);
     font-weight: 600;
+    font-size: x-large;
     text-decoration: none;
+    
+    &:hover {
+      color: rgb(from var(--foreground) r g b / 0.8);
+    }
   }
 
   .nav-desktop {

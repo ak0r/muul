@@ -12,19 +12,28 @@
     font-family: var(--font-primary);
   }
 
-  html[data-theme="dark"] {
-    color-scheme: dark;
-    background-color: #09090b;
-    color: #fafafa;
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-headings);
+  }
+
+  a {
+    color: var(--foreground);
   }
 }
 
 @layer components {
   :root {
-    --article-max: 960px;
+    --container-max: 960px;
+    --article-max: 840px;
   }
-
   .article {
     max-width: var(--article-max);
+  }
+  .nav-link {
+    text-decoration: none;
+    
+    &:hover {
+      color: rgb(from var(--foreground) r g b / 0.8);
+    }
   }
 }
