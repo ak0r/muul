@@ -2,12 +2,6 @@
 @import './theme.css';
 
 @layer base {
-  
-  *, *::before, *::after {
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
-  }
-
   body {
     font-family: var(--font-primary);
   }
@@ -16,15 +10,16 @@
     font-family: var(--font-headings);
   }
 
+  /* Override Oat's link colour — foreground, not --primary */
   a {
     color: var(--foreground);
-    
+
     &:hover {
-      color: rgb(from var(--foreground) r g b / 0.8);
+      color: rgb(from var(--foreground) r g b / 0.7);
     }
   }
 
-  /* External links — unicode arrow indicator */
+  /* External link arrow */
   a[href^="http"]::after,
   a[href^="https"]::after {
     content: " ↗";
@@ -36,43 +31,66 @@
 @layer components {
   :root {
     --container-max: 960px;
-    --article-max: 840px;
+    --article-max: 720px;
   }
+
+  /* ─── Layout spacing ──────────────────────────────────── */
 
   main {
-    margin-top: var(--space-10);
-    margin-bottom: var(--space-10);
+    padding-block: var(--space-14);
   }
 
-  footer {
-    margin-top: var(--space-10);
-    margin-bottom: var(--space-10); 
+  /* ─── Containers ──────────────────────────────────────── */
+
+  .container {
+    width: 100%;
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding-inline: var(--space-4);
   }
 
   .article {
     max-width: var(--article-max);
+    margin-inline: auto;
   }
+
+  /* ─── Nav links ───────────────────────────────────────── */
+
   .nav-link {
+    color: var(--muted-foreground);
     text-decoration: none;
-    font-size: small;
-    
+    font-size: var(--text-7);
+    transition: color var(--transition-fast);
+
     &:hover {
-      color: rgb(from var(--foreground) r g b / 0.8);
+      color: var(--foreground);
     }
 
-    /* Override external arrow for nav links */
-    &[href^="http"]::after,
-    &[href^="https"]::after {
-      content: none;
+    /* No external arrow on nav items */
+    &::after {
+      content: none !important;
+    }
+
+    /* Active page */
+    &[aria-current="page"] {
+      color: var(--foreground);
+      font-weight: var(--font-medium);
+      text-decoration: underline;
+      text-underline-offset: 3px;
     }
   }
 
-  button.outline:hover,
-  button.ghost:hover {
-    color: var(--primary);
+  /* ─── Button outline/ghost hover → --secondary ────────── */
+  /*
+    Oat uses --_hov as the hover background on .outline/.ghost.
+    Setting it here in @layer components wins over Oat's @layer base.
+  */
+  :is(button, [type="button"], [type="submit"], a.button):is(.outline, .ghost) {
+    --_hov: var(--secondary);
   }
 
-  /* Visually hidden but accessible to screen readers and crawlers */
+  /* ─── Utilities ───────────────────────────────────────── */
+
   .sr-only {
     position: absolute;
     width: 1px;

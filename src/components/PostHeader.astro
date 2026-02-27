@@ -25,7 +25,8 @@ const formattedDate = published.toLocaleDateString("en-US", {
   {tags && tags.length > 0 && (
     <div class="post-tags" aria-label="Tags">
       {tags.map((tag) => (
-        <a href={`/tags/${tag}`} class="badge">{tag}</a>
+        <!-- Oat badge with outline variant — links styled as tags -->
+        <a href={`/tags/${tag}`} class="badge outline">{tag}</a>
       ))}
     </div>
   )}
@@ -33,7 +34,7 @@ const formattedDate = published.toLocaleDateString("en-US", {
 
 <style>
   .post-header {
-    margin-bottom: var(--space-8);
+    margin-bottom: var(--space-10);
   }
 
   .post-meta {
@@ -41,14 +42,19 @@ const formattedDate = published.toLocaleDateString("en-US", {
     align-items: center;
     gap: var(--space-2);
     color: var(--muted-foreground);
-    font-size: 0.9rem;
+    font-size: var(--text-7);
     margin-top: var(--space-2);
+  }
+
+  /* No external arrow on badge tag links */
+  .post-tags a::after {
+    content: none !important;
   }
 
   .post-tags {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-2);
-    margin-top: var(--space-3);
+    margin-top: var(--space-4);
   }
 </style>

@@ -2,13 +2,47 @@
 import { siteConfig } from "@/site.config";
 ---
 
-<footer class="container">
-  <p>&copy; {new Date().getFullYear()} {siteConfig.author}</p>
-  <div class="nav-footer">
-    {siteConfig.social.map((item) => (
-      <a href={item.url} target="_blank" rel="noopener noreferrer" class="nav-link">
-        {item.title}
-      </a>
-    ))}
+<footer>
+  <div class="container footer-inner">
+    <p class="footer-copy">
+      &copy; {new Date().getFullYear()} {siteConfig.author}
+    </p>
+    <nav class="footer-nav" aria-label="Social links">
+      {siteConfig.social.map((item) => (
+        <a
+          href={item.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="nav-link"
+        >
+          {item.title}
+        </a>
+      ))}
+    </nav>
   </div>
 </footer>
+
+<style>
+  footer {
+    border-top: 1px solid var(--border);
+    padding-block: var(--space-8);
+  }
+
+  .footer-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+  }
+
+  .footer-copy {
+    font-size: var(--text-7);
+    color: var(--muted-foreground);
+    margin: 0;
+  }
+
+  .footer-nav {
+    display: flex;
+    gap: var(--space-4);
+  }
+</style>

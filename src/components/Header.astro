@@ -1,5 +1,12 @@
 ---
 import { siteConfig } from "@/site.config";
+
+const currentPath = new URL(Astro.request.url).pathname;
+
+function isActive(href: string): boolean {
+  if (href === "/") return currentPath === "/";
+  return currentPath.startsWith(href);
+}
 ---
 
 <header>
@@ -10,21 +17,25 @@ import { siteConfig } from "@/site.config";
       <!-- Desktop nav -->
       <div class="nav-desktop">
         {siteConfig.navigation.map((item) => (
-          <a href={item.url} class="nav-link">{item.title}</a>
+          <a
+            href={item.url}
+            class="nav-link"
+            aria-current={isActive(item.url) ? "page" : undefined}
+          >
+            {item.title}
+          </a>
         ))}
         <button
           id="theme-toggle"
-          class="outline small theme-toggle"
+          class="outline small icon theme-toggle"
           aria-label="Toggle theme"
           title="Toggle light/dark theme"
         >
-          <!-- Sun: shown in dark mode (click to go light) -->
-          <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <circle cx="12" cy="12" r="4"/>
             <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
           </svg>
-          <!-- Moon: shown in light mode (click to go dark) -->
-          <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
           </svg>
         </button>
@@ -42,21 +53,27 @@ import { siteConfig } from "@/site.config";
   </div>
 
   <!-- Mobile dropdown -->
-  <div id="nav-mobile" class="nav-mobile nav-mobile--hidden">
+  <div id="nav-mobile" class="nav-mobile" hidden>
     <div class="container">
       {siteConfig.navigation.map((item) => (
-        <a href={item.url} class="nav-link">{item.title}</a>
+        <a
+          href={item.url}
+          class="nav-link"
+          aria-current={isActive(item.url) ? "page" : undefined}
+        >
+          {item.title}
+        </a>
       ))}
       <button
         id="theme-toggle-mobile"
-        class="outline small theme-toggle"
+        class="outline theme-toggle"
         aria-label="Toggle theme"
       >
-        <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <circle cx="12" cy="12" r="4"/>
           <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
         </svg>
-        <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
         </svg>
         <span>Theme</span>
@@ -82,13 +99,13 @@ import { siteConfig } from "@/site.config";
   const navMobile = document.getElementById("nav-mobile");
 
   navToggle?.addEventListener("click", () => {
-    const isOpen = !navMobile?.classList.contains("nav-mobile--hidden");
-    if (isOpen) {
-      navMobile?.classList.add("nav-mobile--hidden");
-      navToggle.setAttribute("aria-expanded", "false");
-    } else {
-      navMobile?.classList.remove("nav-mobile--hidden");
+    const isHidden = navMobile?.hasAttribute("hidden");
+    if (isHidden) {
+      navMobile?.removeAttribute("hidden");
       navToggle.setAttribute("aria-expanded", "true");
+    } else {
+      navMobile?.setAttribute("hidden", "");
+      navToggle.setAttribute("aria-expanded", "false");
     }
   });
 </script>
@@ -98,9 +115,9 @@ import { siteConfig } from "@/site.config";
     position: sticky;
     top: 0;
     z-index: 100;
+    height: var(--space-16);
     border-bottom: 1px solid var(--border);
     background-color: var(--background);
-    margin-bottom: var(--space-10);
   }
 
   nav {
@@ -108,18 +125,23 @@ import { siteConfig } from "@/site.config";
     align-items: center;
     justify-content: space-between;
     padding-block: var(--space-3);
+    gap: var(--space-4);
   }
 
   .brand {
     font-family: var(--font-brand);
-    font-weight: 600;
-    font-size: x-large;
+    font-weight: var(--font-semibold);
+    font-size: var(--text-5);
     text-decoration: none;
     color: var(--foreground);
+    flex-shrink: 0;
 
     &:hover {
       color: rgb(from var(--foreground) r g b / 0.8);
     }
+
+    /* No external arrow */
+    &::after { content: none !important; }
   }
 
   .nav-desktop {
@@ -143,24 +165,23 @@ import { siteConfig } from "@/site.config";
     padding-block: var(--space-3);
   }
 
-  .nav-mobile--hidden {
-    display: none;
-  }
-
-  /* Icon visibility — moon shown in light, sun shown in dark */
+  /* Icon visibility — moon in light mode, sun in dark mode */
   .icon-sun { display: none; }
   .icon-moon { display: block; }
 
-  :global([data-theme="dark"]) .icon-sun { display: block; }
-  :global([data-theme="dark"]) .icon-moon { display: none; }
+  :global([data-theme="dark"]) .icon-sun  { display: block; }
+  :global([data-theme="dark"]) .icon-moon { display: none;  }
 
   @media (prefers-color-scheme: dark) {
-    .icon-sun { display: block; }
-    .icon-moon { display: none; }
+    .icon-sun  { display: block; }
+    .icon-moon { display: none;  }
+
+    :global([data-theme="light"]) .icon-sun  { display: none;  }
+    :global([data-theme="light"]) .icon-moon { display: block; }
   }
 
   @media (max-width: 640px) {
-    .nav-desktop { display: none; }
+    .nav-desktop    { display: none; }
     .nav-mobile-toggle { display: inline-flex; }
   }
 </style>

@@ -20,49 +20,57 @@ const postReadTime = calculateReadingTime(entry.body ?? "").text;
 ---
 
 <BaseLayout>
-  <SEO slot="seo" {title} {description} />
+  <SEO slot="seo" {title} description={description ?? ""} />
 
-  <article class="article container">
+  <div class="container">
+    <article class="article">
 
-    <PostHeader {title} {published} readTime={postReadTime} {tags} />
+      <PostHeader {title} {published} readTime={postReadTime} {tags} />
 
-    {cover && (
-      <figure class="post-cover">
-        <img src={cover} alt={title} />
-      </figure>
-    )}
+      {cover && (
+        <figure class="post-cover">
+          <img src={cover} alt={title} />
+        </figure>
+      )}
 
-    <section class="post-content">
-      <slot />
-    </section>
+      <section class="post-content">
+        <slot />
+      </section>
 
-    {related.length > 0 && (
-      <aside class="related-posts">
-        <h2>Related Posts</h2>
-        <ul>
-          {related.map((post) => (
-            <li>
-              <a href={`/posts/${post.id}`}>{post.data.title}</a>
-              <time datetime={post.data.published.toISOString()}>
-                {post.data.published.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}
-              </time>
-            </li>
-          ))}
-        </ul>
-      </aside>
-    )}
+      {related.length > 0 && (
+        <aside class="related-posts">
+          <h2>Related</h2>
+          <ul>
+            {related.map((post) => (
+              <li>
+                <a href={`/posts/${post.id}`}>{post.data.title}</a>
+                <time datetime={post.data.published.toISOString()}>
+                  {post.data.published.toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </time>
+              </li>
+            ))}
+          </ul>
+        </aside>
+      )}
 
-  </article>
+    </article>
+  </div>
 </BaseLayout>
 
 <style>
   .post-cover {
     margin-bottom: var(--space-8);
+    border-radius: var(--radius-medium);
+    overflow: hidden;
   }
 
   .post-cover img {
     width: 100%;
-    border-radius: var(--radius);
+    display: block;
   }
 
   .post-content {
@@ -76,12 +84,14 @@ const postReadTime = calculateReadingTime(entry.body ?? "").text;
   }
 
   .related-posts h2 {
+    font-size: var(--text-4);
     margin-bottom: var(--space-4);
   }
 
   .related-posts ul {
     list-style: none;
     padding: 0;
+    margin: 0;
     display: flex;
     flex-direction: column;
     gap: var(--space-3);
@@ -94,9 +104,14 @@ const postReadTime = calculateReadingTime(entry.body ?? "").text;
     gap: var(--space-4);
   }
 
+  .related-posts a::after {
+    content: none !important;
+  }
+
   .related-posts time {
     color: var(--muted-foreground);
-    font-size: 0.85rem;
+    font-size: var(--text-7);
     white-space: nowrap;
+    flex-shrink: 0;
   }
 </style>

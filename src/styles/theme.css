@@ -1,27 +1,36 @@
 @layer theme {
   :root {
     color-scheme: light dark;
-    --background: light-dark(#FFFCF0, #100F0F);
-    --foreground: light-dark(#100F0F, #FFFCF0);
-    --card: light-dark(#F2F0E5, #1C1B1A);
-    --card-foreground: light-dark(#100F0F, #CECDC3);
-    --primary: light-dark(#DAD8CE, #343331);
-    --primary-foreground: light-dark(#100F0F, #FFFCF0);
-    --secondary: light-dark(#575653, #B7B5AC);
-    --secondary-foreground: light-dark(#100F0F, #FFFCF0);
-    --muted: light-dark(#403E3C, #CECDC3);
-    --muted-foreground: light-dark(#6F6E69, #878580);
-    --faint: light-dark(#6F6E69, #878580);
-    --faint-foreground: light-dark(#575653, #B7B5AC);
-    --accent: light-dark(#24837B, #3AA99F);
-    --danger: light-dark(#AF3029, #D14D41);
-    --danger-foreground: light-dark(#fafafa, #18181b);
-    --success: light-dark(#66800B, #879A39);
-    --success-foreground: light-dark(#fafafa, #18181b);
-    --warning: light-dark(#BC5215, #DA702C);
-    --warning-foreground: #09090b;
-    --border: light-dark(#E6E4D9, #282726);
-    --input: light-dark(#d4d4d8, #52525b);
-    --ring: light-dark(#E6E4D9, #282726);
+
+    /* Flexoki-inspired palette */
+    --background:          light-dark(#FFFCF0, #100F0F);
+    --foreground:          light-dark(#100F0F, #FFFCF0);
+    --card:                light-dark(#F2F0E5, #1C1B1A);
+    --card-foreground:     light-dark(#100F0F, #CECDC3);
+    --primary:             light-dark(#DAD8CE, #343331);
+    --primary-foreground:  light-dark(#100F0F, #FFFCF0);
+    --secondary:           light-dark(#575653, #B7B5AC);
+    --secondary-foreground:light-dark(#100F0F, #FFFCF0);
+    --muted:               light-dark(#E6E4D9, #1C1B1A);
+    --muted-foreground:    light-dark(#878580, #6F6E69);
+    --faint:               light-dark(#F2F0E5, #1C1B1A);
+    --faint-foreground:    light-dark(#B7B5AC, #575653);
+    --accent:              light-dark(#24837B, #3AA99F);
+    --accent-foreground:   light-dark(#FFFCF0, #100F0F);
+    --danger:              light-dark(#AF3029, #D14D41);
+    --danger-foreground:   light-dark(#FFFCF0, #100F0F);
+    --success:             light-dark(#66800B, #879A39);
+    --success-foreground:  light-dark(#FFFCF0, #100F0F);
+    --warning:             light-dark(#BC5215, #DA702C);
+    --warning-foreground:  light-dark(#FFFCF0, #100F0F);
+    --border:              light-dark(#E6E4D9, #282726);
+    --input:               light-dark(#E6E4D9, #282726);
+    --ring:                light-dark(#575653, #B7B5AC);
+
+    /* Typography */
+    /* --font-primary:   Georgia, 'Times New Roman', serif;
+    --font-headings:  system-ui, sans-serif;
+    --font-brand:     system-ui, sans-serif;
+    --font-code:      ui-monospace, Consolas, monospace; */
   }
 }
