@@ -14,4 +14,6 @@ export const siteConfig = {
     { title: "Articles", url: "/posts" },
     { title: "About", url: "/about" },
   ],
+  recentPosts: 8,
+  relatedPosts: 4,
 } as const;

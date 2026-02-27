@@ -1,0 +1,89 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import SEO from "@/components/SEO.astro";
+import { groupByYear } from "@/utils/groupByYear";
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection("posts", ({ data }) => !data.draft);
+  const tags = new Set(allPosts.flatMap((post) => post.data.tags ?? []));
+
+  return [...tags].map((tag) => ({
+    params: { tag },
+    props: {
+      posts: allPosts
+        .filter((post) => post.data.tags?.includes(tag))
+        .sort((a, b) => b.data.published.valueOf() - a.data.published.valueOf()),
+    },
+  }));
+}
+
+const { tag } = Astro.params;
+const { posts } = Astro.props;
+const grouped = groupByYear(posts);
+---
+
+<BaseLayout>
+  <SEO slot="seo" title={`Tag: ${tag}`} description={`Posts tagged with ${tag}`} />
+
+  <div class="container">
+    <h1>
+      <span class="badge">{tag}</span>
+    </h1>
+
+    {[...grouped.entries()].map(([year, posts]) => (
+      <div class="year-group">
+        <h2 class="year-heading">{year}</h2>
+        <ul class="post-list">
+          {posts.map((post) => (
+            <li class="post-item">
+              <a href={`/posts/${post.id}`}>{post.data.title}</a>
+              <time datetime={post.data.published.toISOString()}>
+                {post.data.published.toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+              </time>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+</BaseLayout>
+
+<style>
+  h1 {
+    margin-bottom: var(--space-8);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .year-group {
+    margin-bottom: var(--space-8);
+  }
+
+  .year-heading {
+    color: var(--muted-foreground);
+    margin-bottom: var(--space-3);
+  }
+
+  .post-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .post-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--space-4);
+  }
+
+  .post-item time {
+    color: var(--muted-foreground);
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+</style>

@@ -19,6 +19,14 @@
   a {
     color: var(--foreground);
   }
+
+  /* External links — unicode arrow indicator */
+  a[href^="http"]::after,
+  a[href^="https"]::after {
+    content: " ↗";
+    font-size: 0.75em;
+    vertical-align: super;
+  }
 }
 
 @layer components {
@@ -26,14 +34,45 @@
     --container-max: 960px;
     --article-max: 840px;
   }
+
+  main {
+    margin-top: var(--space-10);
+    margin-bottom: var(--space-10);
+  }
+
+  footer {
+    margin-top: var(--space-10);
+    margin-bottom: var(--space-10); 
+  }
+
   .article {
     max-width: var(--article-max);
   }
   .nav-link {
     text-decoration: none;
+    font-size: small;
     
     &:hover {
       color: rgb(from var(--foreground) r g b / 0.8);
     }
+
+    /* Override external arrow for nav links */
+    &[href^="http"]::after,
+    &[href^="https"]::after {
+      content: none;
+    }
+  }
+
+  /* Visually hidden but accessible to screen readers and crawlers */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
   }
 }

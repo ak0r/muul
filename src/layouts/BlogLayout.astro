@@ -1,39 +1,102 @@
 ---
-import '@knadh/oat/oat.min.js';
 import type { CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import SEO from "@/components/SEO.astro";
+import PostHeader from "@/components/PostHeader.astro";
+import { calculateReadingTime, getRelatedPosts } from "@/utils/content.utils";
+import { siteConfig } from "@/site.config";
 
 interface Props {
   entry: CollectionEntry<"posts">;
 }
 
 const { entry } = Astro.props;
-const { title, description, published, tags } = entry.data;
+const { title, description, published, tags, cover } = entry.data;
+
+const allPosts = await getCollection("posts", ({ data }) => !data.draft);
+const related = getRelatedPosts(entry, allPosts, siteConfig.relatedPosts);
+const postReadTime = calculateReadingTime(entry.body ?? "").text;
 ---
 
 <BaseLayout>
   <SEO slot="seo" {title} {description} />
 
-  <article class="article">
-    <header>
-      <h1>{title}</h1>
-      <time datetime={published.toISOString()}>
-        {published.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
-      </time>
-      {tags && tags.length > 0 && (
-        <ul aria-label="Tags">
-          {tags.map((tag) => (
+  <article class="article container">
+
+    <PostHeader {title} {published} readTime={postReadTime} {tags} />
+
+    {cover && (
+      <figure class="post-cover">
+        <img src={cover} alt={title} />
+      </figure>
+    )}
+
+    <section class="post-content">
+      <slot />
+    </section>
+
+    {related.length > 0 && (
+      <aside class="related-posts">
+        <h2>Related Posts</h2>
+        <ul>
+          {related.map((post) => (
             <li>
-              <a href={`/tags/${tag}`}>{tag}</a>
+              <a href={`/posts/${post.id}`}>{post.data.title}</a>
+              <time datetime={post.data.published.toISOString()}>
+                {post.data.published.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}
+              </time>
             </li>
           ))}
         </ul>
-      )}
-    </header>
+      </aside>
+    )}
 
-    <section>
-      <slot />
-    </section>
   </article>
 </BaseLayout>
+
+<style>
+  .post-cover {
+    margin-bottom: var(--space-8);
+  }
+
+  .post-cover img {
+    width: 100%;
+    border-radius: var(--radius);
+  }
+
+  .post-content {
+    margin-bottom: var(--space-10);
+  }
+
+  .related-posts {
+    border-top: 1px solid var(--border);
+    padding-top: var(--space-8);
+    margin-top: var(--space-8);
+  }
+
+  .related-posts h2 {
+    margin-bottom: var(--space-4);
+  }
+
+  .related-posts ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .related-posts li {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--space-4);
+  }
+
+  .related-posts time {
+    color: var(--muted-foreground);
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+</style>

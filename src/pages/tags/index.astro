@@ -1,0 +1,49 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import SEO from "@/components/SEO.astro";
+
+const allPosts = await getCollection("posts", ({ data }) => !data.draft);
+
+// Collect all tags with post counts
+const tagMap = new Map<string, number>();
+for (const post of allPosts) {
+  for (const tag of post.data.tags ?? []) {
+    tagMap.set(tag, (tagMap.get(tag) ?? 0) + 1);
+  }
+}
+const tags = [...tagMap.entries()].sort((a, b) => a[0].localeCompare(b[0]));
+---
+
+<BaseLayout>
+  <SEO slot="seo" title="Tags" description="Browse posts by tag" />
+
+  <div class="container">
+    <h1>Tags</h1>
+
+    <div class="tag-list">
+      {tags.map(([tag, count]) => (
+        <a href={`/tags/${tag}`} class="badge">
+          {tag} <span class="tag-count">({count})</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  h1 {
+    margin-bottom: var(--space-8);
+  }
+
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .tag-count {
+    color: var(--muted-foreground);
+    font-size: 0.85em;
+  }
+</style>

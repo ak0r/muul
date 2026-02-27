@@ -1,9 +1,89 @@
 ---
-import BaseLayout from "@/layouts/BaseLayout.astro"
+import { render } from "astro:content";
+import { getCollection, getEntry } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import SEO from "@/components/SEO.astro";
+import { siteConfig } from "@/site.config";
+import { groupByYear } from "@/utils/content.utils";
+
+const homeEntry = await getEntry("pages", "home");
+const { Content } = await render(homeEntry);
+
+const allPosts = await getCollection("posts", ({ data }) => !data.draft);
+const sorted = allPosts.sort(
+  (a, b) => b.data.published.valueOf() - a.data.published.valueOf()
+);
+const recent = sorted.slice(0, siteConfig.recentPosts);
+const grouped = groupByYear(recent);
 ---
 
 <BaseLayout>
-	<div class="container">
-		<h1>Astro</h1>
-	</div>
+  <SEO slot="seo" title="Home" description={siteConfig.description} />
+
+  <div class="container">
+    <h1 class="sr-only">{siteConfig.title}</h1>
+
+    <section class="home-intro">
+      <Content />
+    </section>
+
+    <section class="home-posts">
+      <h2>Recent Posts</h2>
+      {[...grouped.entries()].map(([year, posts]) => (
+        <div class="year-group">
+          <h3 class="year-heading">{year}</h3>
+          <ul class="post-list">
+            {posts.map((post) => (
+              <li class="post-item">
+                <a href={`/posts/${post.id}`}>{post.data.title}</a>
+                <time datetime={post.data.published.toISOString()}>
+                  {post.data.published.toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                </time>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </section>
+  </div>
 </BaseLayout>
+
+<style>
+  .home-intro {
+    margin-bottom: var(--space-12);
+  }
+
+  .home-posts h2 {
+    margin-bottom: var(--space-6);
+  }
+
+  .year-group {
+    margin-bottom: var(--space-8);
+  }
+
+  .year-heading {
+    color: var(--muted-foreground);
+    margin-bottom: var(--space-3);
+  }
+
+  .post-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .post-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--space-4);
+  }
+
+  .post-item time {
+    color: var(--muted-foreground);
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+</style>

@@ -15,7 +15,7 @@ export default defineConfig({
     contentIntellisense: true,
     fonts: [
       {
-        name: "Newsreader",
+        name: "Rubik",
         cssVariable: "--font-headings",
         provider: fontProviders.fontsource(),
         weights: [400, 500, 600, 700],
@@ -26,14 +26,14 @@ export default defineConfig({
         cssVariable: "--font-primary",
         provider: fontProviders.fontsource(),
         weights: [400, 500, 600, 700],
-        fallbacks: ["serif"],
+        fallbacks: ["sans-serif"],
       },
       {
-        name: "Rubik",
+        name: "Newsreader",
         cssVariable: "--font-secondary",
         provider: fontProviders.fontsource(),
         weights: [400, 500, 600, 700],
-        fallbacks: ["sans-serif"],
+        fallbacks: ["serif"],
       },
       {
         name: "Fira Code",
