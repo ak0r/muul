@@ -3,7 +3,7 @@ title: About
 description: About this site and the person behind it.
 ---
 
-This site is built with [Muul](https://github.com/yourusername/muul) — a minimal Astro blog template.
+This site is built with [Muul](https://github.com/ak0r/muul) — a minimal Astro blog template.
 
 ## What this place is
 
