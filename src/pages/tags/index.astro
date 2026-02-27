@@ -23,7 +23,7 @@ const tags = [...tagMap.entries()].sort((a, b) => a[0].localeCompare(b[0]));
 
     <div class="tag-list">
       {tags.map(([tag, count]) => (
-        <a href={`/tags/${tag}`} class="badge">
+        <a href={`/tags/${tag}`} class="badge outline">
           {tag} <span class="tag-count">({count})</span>
         </a>
       ))}

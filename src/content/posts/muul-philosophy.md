@@ -1,10 +1,10 @@
 ---
 title: "Muul — A Foundation, Not a Framework"
 description: "On why Muul exists, what it stands for, and what it deliberately leaves out."
-published: 2026-02-27
+published: 2025-12-27
 tags:
   - muul
-  - meta
+  - philosophy
 ---
 
 Muul (मूळ) means *foundation* in Sanskrit. That name is the entire philosophy.

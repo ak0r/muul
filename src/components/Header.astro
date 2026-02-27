@@ -27,7 +27,7 @@ function isActive(href: string): boolean {
         ))}
         <button
           id="theme-toggle"
-          class="outline small icon theme-toggle"
+          class="outline theme-toggle"
           aria-label="Toggle theme"
           title="Toggle light/dark theme"
         >
@@ -44,7 +44,7 @@ function isActive(href: string): boolean {
       <!-- Mobile hamburger -->
       <button
         id="nav-toggle"
-        class="outline small nav-mobile-toggle"
+        class="outline nav-mobile-toggle"
         aria-label="Toggle menu"
         aria-expanded="false"
         aria-controls="nav-mobile"
@@ -115,7 +115,6 @@ function isActive(href: string): boolean {
     position: sticky;
     top: 0;
     z-index: 100;
-    height: var(--space-16);
     border-bottom: 1px solid var(--border);
     background-color: var(--background);
   }
@@ -131,7 +130,7 @@ function isActive(href: string): boolean {
   .brand {
     font-family: var(--font-brand);
     font-weight: var(--font-semibold);
-    font-size: var(--text-5);
+    font-size: var(--text-2);
     text-decoration: none;
     color: var(--foreground);
     flex-shrink: 0;

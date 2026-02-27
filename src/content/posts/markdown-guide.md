@@ -3,7 +3,7 @@ title: "Typography & Markdown Guide"
 description: "A live reference of all typographic elements rendered by this template."
 published: 2026-02-24
 tags:
-  - meta
+  - markdown
   - muul
 ---
 

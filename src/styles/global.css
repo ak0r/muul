@@ -86,7 +86,7 @@
     Setting it here in @layer components wins over Oat's @layer base.
   */
   :is(button, [type="button"], [type="submit"], a.button):is(.outline, .ghost) {
-    --_hov: var(--secondary);
+    --_hov: rgb(from var(--muted) r g b / 0.7);
   }
 
   /* ─── Utilities ───────────────────────────────────────── */
