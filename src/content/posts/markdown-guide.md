@@ -2,6 +2,8 @@
 title: Markdown Guide
 description: Markdown Guide
 published: 2026-02-24
+tags:
+  - markdown
 ---
 ## Overview
 

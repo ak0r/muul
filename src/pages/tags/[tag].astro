@@ -2,7 +2,7 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import SEO from "@/components/SEO.astro";
-import { groupByYear } from "@/utils/groupByYear";
+import { groupByYear } from "@/utils/content.utils";
 
 export async function getStaticPaths() {
   const allPosts = await getCollection("posts", ({ data }) => !data.draft);
@@ -21,15 +21,18 @@ export async function getStaticPaths() {
 const { tag } = Astro.params;
 const { posts } = Astro.props;
 const grouped = groupByYear(posts);
+const postCount = posts.length;
 ---
 
 <BaseLayout>
-  <SEO slot="seo" title={`Tag: ${tag}`} description={`Posts tagged with ${tag}`} />
+  <SEO slot="seo" title={`${tag}`} description={`${postCount} post${postCount === 1 ? '' : 's'} tagged with ${tag}`} />
 
   <div class="container">
-    <h1>
-      <span class="badge">{tag}</span>
-    </h1>
+    <header class="tag-header">
+      <div class="tag-label">Tag</div>
+      <h1><span class="badge">{tag}</span></h1>
+      <p class="tag-meta">{postCount} post{postCount === 1 ? '' : 's'}</p>
+    </header>
 
     {[...grouped.entries()].map(([year, posts]) => (
       <div class="year-group">
@@ -50,11 +53,28 @@ const grouped = groupByYear(posts);
 </BaseLayout>
 
 <style>
-  h1 {
-    margin-bottom: var(--space-8);
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
+  .tag-header {
+    margin-bottom: var(--space-10);
+    padding-bottom: var(--space-6);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .tag-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted-foreground);
+    margin-bottom: var(--space-2);
+  }
+
+  .tag-header h1 {
+    margin-bottom: var(--space-2);
+  }
+
+  .tag-meta {
+    color: var(--muted-foreground);
+    font-size: 0.9rem;
+    margin: 0;
   }
 
   .year-group {

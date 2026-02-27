@@ -14,10 +14,20 @@ import { siteConfig } from "@/site.config";
         ))}
         <button
           id="theme-toggle"
-          class="outline small"
+          class="outline small theme-toggle"
           aria-label="Toggle theme"
           title="Toggle light/dark theme"
-        >◐</button>
+        >
+          <!-- Sun: shown in dark mode (click to go light) -->
+          <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"/>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+          </svg>
+          <!-- Moon: shown in light mode (click to go dark) -->
+          <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+          </svg>
+        </button>
       </div>
 
       <!-- Mobile hamburger -->
@@ -31,23 +41,31 @@ import { siteConfig } from "@/site.config";
     </nav>
   </div>
 
-  <!-- Mobile dropdown — outside container so content can be padded separately -->
+  <!-- Mobile dropdown -->
   <div id="nav-mobile" class="nav-mobile nav-mobile--hidden">
     <div class="container">
       {siteConfig.navigation.map((item) => (
-        <a href={item.url}>{item.title}</a>
+        <a href={item.url} class="nav-link">{item.title}</a>
       ))}
       <button
         id="theme-toggle-mobile"
-        class="outline small"
+        class="outline small theme-toggle"
         aria-label="Toggle theme"
-      >◐ Toggle theme</button>
+      >
+        <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"/>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+        </svg>
+        <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+        </svg>
+        <span>Theme</span>
+      </button>
     </div>
   </div>
 </header>
 
 <script>
-  // Theme toggle — targets <body> as required by Oat
   function toggleTheme() {
     var cs = document.documentElement.style.colorScheme;
     var isDark = cs === 'dark' || (!cs && matchMedia('(prefers-color-scheme: dark)').matches);
@@ -57,10 +75,9 @@ import { siteConfig } from "@/site.config";
     localStorage.setItem('theme', theme);
   }
 
-  document.getElementById("   ")?.addEventListener("click", toggleTheme);
+  document.getElementById("theme-toggle")?.addEventListener("click", toggleTheme);
   document.getElementById("theme-toggle-mobile")?.addEventListener("click", toggleTheme);
 
-  // Mobile nav toggle
   const navToggle = document.getElementById("nav-toggle");
   const navMobile = document.getElementById("nav-mobile");
 
@@ -98,7 +115,8 @@ import { siteConfig } from "@/site.config";
     font-weight: 600;
     font-size: x-large;
     text-decoration: none;
-    
+    color: var(--foreground);
+
     &:hover {
       color: rgb(from var(--foreground) r g b / 0.8);
     }
@@ -129,13 +147,20 @@ import { siteConfig } from "@/site.config";
     display: none;
   }
 
-  @media (max-width: 640px) {
-    .nav-desktop {
-      display: none;
-    }
+  /* Icon visibility — moon shown in light, sun shown in dark */
+  .icon-sun { display: none; }
+  .icon-moon { display: block; }
 
-    .nav-mobile-toggle {
-      display: inline-flex;
-    }
+  :global([data-theme="dark"]) .icon-sun { display: block; }
+  :global([data-theme="dark"]) .icon-moon { display: none; }
+
+  @media (prefers-color-scheme: dark) {
+    .icon-sun { display: block; }
+    .icon-moon { display: none; }
+  }
+
+  @media (max-width: 640px) {
+    .nav-desktop { display: none; }
+    .nav-mobile-toggle { display: inline-flex; }
   }
 </style>

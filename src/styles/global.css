@@ -18,6 +18,10 @@
 
   a {
     color: var(--foreground);
+    
+    &:hover {
+      color: rgb(from var(--foreground) r g b / 0.8);
+    }
   }
 
   /* External links — unicode arrow indicator */
@@ -61,6 +65,11 @@
     &[href^="https"]::after {
       content: none;
     }
+  }
+
+  button.outline:hover,
+  button.ghost:hover {
+    color: var(--primary);
   }
 
   /* Visually hidden but accessible to screen readers and crawlers */
