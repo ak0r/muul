@@ -13,6 +13,7 @@ interface Props {
 
 const { entry } = Astro.props;
 const { title, description, published, tags, cover } = entry.data;
+const publishedTime = published;
 
 const allPosts = await getCollection("posts", ({ data }) => !data.draft);
 const related = getRelatedPosts(entry, allPosts, siteConfig.relatedPosts);
@@ -20,7 +21,7 @@ const postReadTime = calculateReadingTime(entry.body ?? "").text;
 ---
 
 <BaseLayout>
-  <SEO slot="seo" {title} description={description ?? ""} />
+  <SEO slot="seo" {title} description={description ?? ""} type="article" {publishedTime} tags={tags} image={cover} />
 
   <div class="container">
     <article class="article">

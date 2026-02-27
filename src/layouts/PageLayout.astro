@@ -15,14 +15,12 @@ const { title, description } = entry.data;
   <SEO slot="seo" {title} {description} />
 
   <div class="container">
-    <article class="article">
-      <header class="page-header">
-        <h1>{title}</h1>
-      </header>
-      <section>
-        <slot />
-      </section>
-    </article>
+    <header class="page-header">
+      <h1>{title}</h1>
+    </header>
+    <section>
+      <slot />
+    </section>
   </div>
 </BaseLayout>
 

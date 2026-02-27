@@ -3,10 +3,7 @@ title: Home
 description: Home Page
 ---
 
-## Systems. Streets. Stories
+## A place for writing.
 
-### Hey I am Amit.
-
-I build systems during the week and explore streets around the world whenever I can. Both worlds make for good stories. This blog documents them both — the technical experiments I run in my off-hours and the places I discover when I’m away from the screen. Sometimes I’m debugging code, other times I’m lost in a new city.
-
-That’s me in 10 seconds. Want the extended version? Head over to [/about](/about).
+Muul (मूळ) is a minimal Astro blog template. Replace this with your own introduction — a sentence or two about who you are and what you write about.
+The template handles the rest: posts by year, tags, dark mode, readable typography. Nothing more.
