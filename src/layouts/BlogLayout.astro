@@ -4,6 +4,7 @@ import { getCollection } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import SEO from "@/components/SEO.astro";
 import PostHeader from "@/components/PostHeader.astro";
+import SeriesNav from "@/components/SeriesNav.astro";
 import { calculateReadingTime, getRelatedPosts } from "@/utils/content.utils";
 import { siteConfig } from "@/site.config";
 
@@ -12,21 +13,40 @@ interface Props {
 }
 
 const { entry } = Astro.props;
-const { title, description, published, tags, cover } = entry.data;
+const { title, description, published, tags, cover, series } = entry.data;
 const publishedTime = published;
 
 const allPosts = await getCollection("posts", ({ data }) => !data.draft);
 const related = getRelatedPosts(entry, allPosts, siteConfig.relatedPosts);
 const postReadTime = calculateReadingTime(entry.body ?? "").text;
+
+// Series: collect and sort posts belonging to the same series
+const seriesPosts = series
+  ? allPosts
+      .filter((p) => p.data.series === series)
+      .sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0))
+  : [];
 ---
 
 <BaseLayout>
-  <SEO slot="seo" {title} description={description ?? ""} type="article" {publishedTime} tags={tags} image={cover} />
+  <SEO
+    slot="seo"
+    {title}
+    description={description ?? ""}
+    type="article"
+    {publishedTime}
+    {tags}
+    image={cover}
+  />
 
   <div class="container">
     <article class="article">
 
       <PostHeader {title} {published} readTime={postReadTime} {tags} />
+
+      {seriesPosts.length > 1 && (
+        <SeriesNav current={entry} posts={seriesPosts} />
+      )}
 
       {cover && (
         <figure class="post-cover">

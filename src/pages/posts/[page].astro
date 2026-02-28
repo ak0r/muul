@@ -1,0 +1,160 @@
+---
+import { getCollection } from "astro:content";
+import type { GetStaticPathsOptions } from "astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import SEO from "@/components/SEO.astro";
+import { groupByYear } from "@/utils/content.utils";
+import { siteConfig } from "@/site.config";
+
+const POSTS_PER_PAGE = siteConfig.postsPerPage ?? 20;
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+  const POSTS_PER_PAGE = 20;
+
+  const allPosts = await getCollection("posts", ({ data }) => !data.draft);
+  const sorted = allPosts.sort(
+    (a, b) => b.data.published.valueOf() - a.data.published.valueOf()
+  );
+
+  return paginate(sorted, { pageSize: POSTS_PER_PAGE });
+}
+
+const { page } = Astro.props;
+const grouped = groupByYear(page.data);
+
+const isFirst = page.currentPage === 1;
+const isLast  = page.currentPage === page.lastPage;
+---
+
+<BaseLayout>
+  <SEO
+    slot="seo"
+    title={isFirst ? "Articles" : `Articles — Page ${page.currentPage}`}
+    description={isFirst ? "All posts" : `Page ${page.currentPage} of ${page.lastPage}`}
+  />
+
+  <div class="container">
+    <header class="posts-header">
+      <h1>Articles</h1>
+      {page.lastPage > 1 && (
+        <span class="page-count">Page {page.currentPage} of {page.lastPage}</span>
+      )}
+    </header>
+
+    {[...grouped.entries()].map(([year, posts]) => (
+      <div class="year-group">
+        <h2 class="year-heading">{year}</h2>
+        <ul class="post-list">
+          {posts.map((post) => (
+            <li class="post-item">
+              <a href={`/posts/${post.id}`}>{post.data.title}</a>
+              <time datetime={post.data.published.toISOString()}>
+                {post.data.published.toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+              </time>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+
+    {page.lastPage > 1 && (
+      <nav class="pagination" aria-label="Pagination">
+        {page.url.prev ? (
+          <a href={page.url.prev} class="pagination-link">← Newer</a>
+        ) : (
+          <span class="pagination-link is-disabled">← Newer</span>
+        )}
+
+        <span class="pagination-info">
+          {page.currentPage} / {page.lastPage}
+        </span>
+
+        {page.url.next ? (
+          <a href={page.url.next} class="pagination-link">Older →</a>
+        ) : (
+          <span class="pagination-link is-disabled">Older →</span>
+        )}
+      </nav>
+    )}
+  </div>
+</BaseLayout>
+
+<style>
+  .posts-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-bottom: var(--space-8);
+  }
+
+  .page-count {
+    font-size: var(--text-7);
+    color: var(--muted-foreground);
+  }
+
+  .year-group {
+    margin-bottom: var(--space-8);
+  }
+
+  .year-heading {
+    color: var(--muted-foreground);
+    margin-bottom: var(--space-3);
+  }
+
+  .post-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .post-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--space-4);
+  }
+
+  .post-item time {
+    color: var(--muted-foreground);
+    font-size: var(--text-7);
+    white-space: nowrap;
+  }
+
+  .pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: var(--space-8);
+    margin-top: var(--space-4);
+    border-top: 1px solid var(--border);
+  }
+
+  .pagination-link {
+    font-size: var(--text-7);
+    text-decoration: none;
+    color: var(--foreground);
+
+    &:hover {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    &::after {
+      content: none !important;
+    }
+
+    &.is-disabled {
+      color: var(--muted-foreground);
+      cursor: default;
+      pointer-events: none;
+    }
+  }
+
+  .pagination-info {
+    font-size: var(--text-8);
+    color: var(--muted-foreground);
+  }
+</style>

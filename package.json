@@ -1,7 +1,7 @@
 {
   "name": "muul",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.2.0",
   "license": "MIT",
   "scripts": {
     "dev": "astro dev",
@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.13",
+    "@astrojs/rss": "^4.0.15",
+    "@astrojs/sitemap": "^3.7.0",
     "@knadh/oat": "^0.4.0",
     "astro": "^5.17.1"
   }

@@ -27,4 +27,5 @@ export const siteConfig = {
   ],
   recentPosts: 8,
   relatedPosts: 4,
+  postsPerPage: 12,
 } as const;

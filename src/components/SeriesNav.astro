@@ -1,0 +1,170 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  current: CollectionEntry<"posts">;
+  posts: CollectionEntry<"posts">[];  // all posts in the series, pre-sorted by order
+}
+
+const { current, posts } = Astro.props;
+
+const currentIndex = posts.findIndex((p) => p.id === current.id);
+const prev = currentIndex > 0 ? posts[currentIndex - 1] : null;
+const next = currentIndex < posts.length - 1 ? posts[currentIndex + 1] : null;
+---
+
+<nav class="series-nav" aria-label="Series navigation">
+  <div class="series-header">
+    <span class="series-label">Series</span>
+    <span class="series-title">{current.data.series}</span>
+    <span class="series-count">{currentIndex + 1} of {posts.length}</span>
+  </div>
+
+  <ol class="series-list">
+    {posts.map((post, i) => (
+      <li class:list={["series-item", { "is-current": post.id === current.id }]}>
+        {post.id === current.id ? (
+          <span class="series-item-title">{post.data.title}</span>
+        ) : (
+          <a href={`/posts/${post.id}`} class="series-item-title">{post.data.title}</a>
+        )}
+      </li>
+    ))}
+  </ol>
+
+  {(prev || next) && (
+    <div class="series-pagination">
+      {prev && (
+        <a href={`/posts/${prev.id}`} class="series-link series-link--prev">
+          <span class="series-link-label">← Previous</span>
+          <span class="series-link-title">{prev.data.title}</span>
+        </a>
+      )}
+      {next && (
+        <a href={`/posts/${next.id}`} class="series-link series-link--next">
+          <span class="series-link-label">Next →</span>
+          <span class="series-link-title">{next.data.title}</span>
+        </a>
+      )}
+    </div>
+  )}
+</nav>
+
+<style>
+  .series-nav {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-medium);
+    padding: var(--space-5);
+    margin-bottom: var(--space-10);
+  }
+
+  .series-header {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    margin-bottom: var(--space-4);
+    flex-wrap: wrap;
+  }
+
+  .series-label {
+    font-size: var(--text-8);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted-foreground);
+    flex-shrink: 0;
+  }
+
+  .series-title {
+    font-weight: var(--font-medium);
+    font-size: var(--text-7);
+    flex: 1;
+  }
+
+  .series-count {
+    font-size: var(--text-8);
+    color: var(--muted-foreground);
+    flex-shrink: 0;
+  }
+
+  .series-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    counter-reset: series-counter;
+  }
+
+  .series-item {
+    counter-increment: series-counter;
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    font-size: var(--text-7);
+
+    &::before {
+      content: counter(series-counter) ".";
+      color: var(--muted-foreground);
+      font-size: var(--text-8);
+      flex-shrink: 0;
+      width: 1.5rem;
+    }
+  }
+
+  .series-item-title {
+    text-decoration: none;
+    color: var(--foreground);
+
+    &:hover {
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+  }
+
+  /* Suppress external arrow on series links */
+  .series-item a::after,
+  .series-link::after {
+    content: none !important;
+  }
+
+  .is-current .series-item-title {
+    color: var(--muted-foreground);
+    font-style: italic;
+  }
+
+  .series-pagination {
+    display: flex;
+    gap: var(--space-4);
+    border-top: 1px solid var(--border);
+    padding-top: var(--space-4);
+    margin-top: var(--space-2);
+  }
+
+  .series-link {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    flex: 1;
+    text-decoration: none;
+
+    &:hover .series-link-title {
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+  }
+
+  .series-link--next {
+    text-align: right;
+  }
+
+  .series-link-label {
+    font-size: var(--text-8);
+    color: var(--muted-foreground);
+  }
+
+  .series-link-title {
+    font-size: var(--text-7);
+    color: var(--foreground);
+  }
+</style>
