@@ -21,8 +21,8 @@ Muul is an Astro blog template. This post walks through everything you need to g
 Clone the repository and install dependencies:
 
 ```bash
-git clone https://github.com/ak0r/muul.git muul-blog
-cd muul-blog
+git clone https://github.com/yourusername/muul.git my-blog
+cd my-blog
 npm install
 npm run dev
 ```
@@ -79,8 +79,8 @@ Available frontmatter fields:
 | `tags`        | string[]   | no       | Generates `/tags/[tag]` pages    |
 | `cover`       | string     | no       | Relative path or absolute URL    |
 | `draft`       | boolean    | no       | `true` hides post from all lists |
-| `series`      | string     | no       | Reserved for future series nav   |
-| `order`       | number     | no       | Reserved for series ordering     |
+| `series`      | string     | no       | Groups posts into a series; shows collapsible nav |
+| `order`       | number     | no       | Position within the series (ascending) |
 
 ## Updating the About page
 

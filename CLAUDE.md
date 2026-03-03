@@ -8,7 +8,7 @@ This file is auto-detected by Claude Code. Read it before making any changes.
 
 **Muul** (मूळ, Sanskrit: *foundation*) is a minimal personal blog template built on Astro 5.
 Philosophy: semantic HTML first, no framework dependencies, composable by design.
-Version: 0.3.1
+Version: 0.4.0
 
 ---
 
@@ -39,6 +39,7 @@ muul/
 │   │   ├── index.astro         # Home — recent posts from siteConfig.recentPosts
 │   │   ├── 404.astro
 │   │   ├── [page].astro        # Dynamic route for pages/ collection
+│   │   ├── search.astro        # Pagefind search UI
 │   │   ├── rss.xml.ts
 │   │   ├── posts/
 │   │   │   ├── index.astro     # Redirects to /posts/1
@@ -63,6 +64,7 @@ muul/
 ├── astro.config.mjs
 ├── package.json
 ├── CHANGELOG.md
+├── LICENSE
 └── CLAUDE.md                   # This file
 ```
 
@@ -112,9 +114,17 @@ npm run dev
 
 ### Build
 ```bash
-npm run build
-npm run preview   # preview the build locally
+npm run build       # builds to ./dist then runs pagefind --site dist
+npm run preview     # preview the build locally (search works here, not in dev)
 ```
+
+### Search
+Search is powered by Pagefind — a static search index generated at build time.
+- Works only after `npm run build` — the `/pagefind/` directory is generated into `dist/`
+- In dev mode, the search page loads but returns no results
+- To test search: `npm run build && npm run preview`
+- Search is scoped to `<article>` elements — only post prose is indexed, not series nav or related posts
+- The search page is `noindex` — it won't appear in search engines
 
 ---
 
@@ -195,6 +205,20 @@ To extend with base colours (neutral, red, blue…), add them in `theme.css` bel
 - No Oat.ink or any third-party CSS dependency
 - No JS framework (Astro components only, zero client JS except theme toggle + mobile nav)
 - No image optimisation beyond Astro's built-in `responsiveStyles`
+
+---
+
+## Syntax highlighting
+
+Handled by [Expressive Code](https://expressive-code.com) via `astro-expressive-code`.
+
+- Configured in `astro.config.mjs` under `expressiveCode({})`
+- Uses `github-light` / `github-dark` themes — swap to any Shiki-compatible theme
+- Switches automatically with `[data-theme]` attribute set by the toggle
+- Style overrides use Muul's CSS tokens (`--border`, `--radius`, `--font-code`)
+- Supports: copy button, line numbers (`showLineNumbers`), line marking, file name frames, terminal frames
+- To add line numbers to a block: ` ```js showLineNumbers `
+- To highlight lines: ` ```js {2-4} `
 
 ---
 

@@ -24,6 +24,7 @@ export const siteConfig = {
     { title: "Articles", url: "/posts" },
     { title: "Tags", url: "/tags" },
     { title: "About", url: "/about" },
+    { title: "Search", url: "/search" },
   ],
   recentPosts: 8,
   relatedPosts: 4,

@@ -47,7 +47,15 @@ const formattedDate = published.toLocaleDateString("en-US", {
     <div class="article">
 
       <!-- Only document content inside article -->
-      <article>
+      <article data-pagefind-body>
+        <!-- Pagefind index metadata -->
+        <meta data-pagefind-meta="title[content]" content={title} />
+        <meta data-pagefind-sort="date[content]" content={published.toISOString()} />
+        <meta data-pagefind-filter="collection[content]" content="posts" />
+        {tags && tags.map((tag) => (
+          <meta data-pagefind-filter="tag[content]" content={tag} />
+        ))}
+        
         <PageHeader {title}>
           <div slot="meta" class="post-meta">
             <time datetime={published.toISOString()}>{formattedDate}</time>

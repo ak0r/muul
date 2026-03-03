@@ -24,3 +24,6 @@ pnpm-debug.log*
 # setting folders
 .idea/
 .vscode/
+
+# Pagfind earch index
+public/pagefind/*

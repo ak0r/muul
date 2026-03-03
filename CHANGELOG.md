@@ -5,6 +5,28 @@ All notable changes to Muul will be documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
+
+## [0.4.0] — 2026-03-03
+
+### Added
+
+- Pagefind static search — indexed at build time via `@pagefind/default-ui`
+- `Search.astro` component — Pagefind UI with URL query param sync (`?q=`), styled via Muul CSS tokens
+- `/search` page using `Search.astro`
+- Pagefind index metadata in `BlogLayout` — title, date sort, collection filter, per-tag filters via `data-pagefind-*` attributes
+- `data-pagefind-body` on `<article>` — scopes index to post prose only, excludes header/footer/nav
+- `astro-expressive-code` integration — copy button, line numbers, line marking, light/dark theme sync
+- `LICENSE` file (MIT)
+
+### Changed
+
+- `npm run build` now runs `pagefind --site dist` automatically after Astro build
+- Search added to default navigation in `site.config.ts`
+- Expressive Code uses `github-light` / `github-dark` themes, overridden with Muul tokens
+- Content fixes: Oat reference removed from `markdown-guide.md`, series field descriptions updated in `getting-started.md`
+
+---
+
 ## [0.3.2] — 2026-03-03
 
 ### Added

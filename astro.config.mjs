@@ -1,8 +1,9 @@
 // @ts-check
 import { defineConfig, fontProviders } from 'astro/config';
 import mdx from '@astrojs/mdx';
-
 import sitemap from "@astrojs/sitemap";
+import expressiveCode from "astro-expressive-code";
+import pagefind from "astro-pagefind";
 
 // https://astro.build/config
 export default defineConfig({
@@ -54,6 +55,25 @@ export default defineConfig({
     ]
   },
 
-  integrations: [mdx(), sitemap()],
-
+  integrations: [
+    // Expressive Code must come before MDX
+    expressiveCode({
+      // Matches your data-theme attribute toggle
+      themes: ['github-light', 'github-dark'],
+      styleOverrides: {
+        // Tie into Muul's token system
+        borderRadius: 'var(--radius)',
+        borderColor: 'var(--border)',
+        codeFontFamily: 'var(--font-code)',
+        codeFontSize: '0.875rem',
+        codeLineHeight: '1.6',
+        frames: {
+          frameBoxShadowCssValue: 'none',
+        },
+      },
+    }),
+    mdx(), 
+    sitemap(),
+    pagefind()
+  ],
 });

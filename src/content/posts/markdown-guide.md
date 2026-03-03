@@ -115,7 +115,7 @@ Three dashes create a thematic break:
 
 ## Mark / highlight
 
-Markdown doesn't have a standard highlight syntax, but if your renderer supports it: ==highlighted text== uses the `<mark>` element, which Oat styles with a warm yellow tint.
+Markdown doesn't have a standard highlight syntax, but if your renderer supports it: ==highlighted text== uses the `<mark>` element, styled with a soft accent tint from the theme.
 
 ---
 
