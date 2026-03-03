@@ -1,8 +1,0 @@
----
-import { getCollection } from "astro:content";
-import BaseLayout from "@/layouts/BaseLayout.astro";
-import SEO from "@/components/SEO.astro";
-import { groupByYear } from "@/utils/content.utils";
-// Redirect /posts to /posts/1 for canonical first page
-return Astro.redirect("/posts/1");
----

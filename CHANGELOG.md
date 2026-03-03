@@ -5,6 +5,18 @@ All notable changes to Muul will be documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
+
+## [0.4.2] — 2026-03-03
+
+### Added
+- `README.md` rewritten — reflects current architecture, removes Oat references, accurate project structure, correct stack
+
+### Changed
+- `/posts` no longer redirects to `/posts/1` — `[page].astro` renamed to `[...page].astro`, `index.astro` removed
+- `highlight` example removed from `markdown-guide.md` — syntax not supported without a remark plugin
+
+---
+
 ## [0.4.1] — 2026-03-03
 
 ### Changed

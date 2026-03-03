@@ -113,12 +113,6 @@ Three dashes create a thematic break:
 
 ---
 
-## Mark / highlight
-
-Markdown doesn't have a standard highlight syntax, but if your renderer supports it: ==highlighted text== uses the `<mark>` element, styled with a soft accent tint from the theme.
-
----
-
 ## Footnotes
 
 Writing often benefits from a footnote[^1] rather than a long parenthetical that interrupts the flow of the sentence.
@@ -137,4 +131,4 @@ HTML is valid inside markdown when needed:
 
 ## What's not here
 
-Math (LaTeX), diagrams (Mermaid), and callout blocks are Obsidian-specific extensions and are not part of this template's scope. If you need them, add the appropriate Astro integration.
+Math (LaTeX), diagrams (Mermaid), and callout blocks are specific extensions and are not part of this template's scope. If you need them, add the appropriate Astro integration.

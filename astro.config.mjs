@@ -59,7 +59,7 @@ export default defineConfig({
     // Expressive Code must come before MDX
     expressiveCode({
       // Matches your data-theme attribute toggle
-      themes: ['github-light', 'github-dark'],
+      themes: ['everforest-dark', 'everforest-light'],
       styleOverrides: {
         // Tie into Muul's token system
         borderRadius: 'var(--radius)',
