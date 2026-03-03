@@ -6,7 +6,7 @@ export const siteConfig = {
   social: [
     {
       title: "GitHub",
-      url: "https://github.com/",
+      url: "https://github.com/ak0r/muul",
       icon: "github",
     },
     {

@@ -1,105 +1,25 @@
-@import '@knadh/oat/oat.min.css';
-@import './theme.css';
+/* ─── Global ───────────────────────────────────────────────────────────────
+   Entry point. Declares layer order, then imports each file.
+   Do not add styles here — find the right layer file instead.
 
-@layer base {
-  body {
-    font-family: var(--font-primary);
-  }
+   Layer order (lowest → highest specificity):
+     reset → tokens → theme → base → typography → components
+   ──────────────────────────────────────────────────────────────────────── */
 
-  h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-headings);
-  }
+@layer reset, tokens, theme, base, typography, components;
 
-  /* Override Oat's link colour — foreground, not --primary */
-  a {
-    color: var(--foreground);
+@import './reset.css'      layer(reset);
+@import './tokens.css'     layer(tokens);
+@import './theme.css'      layer(theme);
+@import './base.css'       layer(base);
+@import './typography.css' layer(typography);
+@import './components.css' layer(components);
 
-    &:hover {
-      color: rgb(from var(--foreground) r g b / 0.7);
-    }
-  }
+/* ── Framework hook ──────────────────────────────────────────────────────
+   To add Tailwind v4, append this line after the imports above:
 
-  /* External link arrow */
-  a[href^="http"]::after,
-  a[href^="https"]::after {
-    content: " ↗";
-    font-size: 0.75em;
-    vertical-align: super;
-  }
-}
+     @import "tailwindcss";
 
-@layer components {
-  :root {
-    --container-max: 960px;
-    --article-max: 720px;
-  }
-
-  /* ─── Layout spacing ──────────────────────────────────── */
-
-  main {
-    padding-block: var(--space-14);
-  }
-
-  /* ─── Containers ──────────────────────────────────────── */
-
-  .container {
-    width: 100%;
-    max-width: var(--container-max);
-    margin-inline: auto;
-    padding-inline: var(--space-4);
-  }
-
-  .article {
-    max-width: var(--article-max);
-    margin-inline: auto;
-  }
-
-  /* ─── Nav links ───────────────────────────────────────── */
-
-  .nav-link {
-    color: var(--muted-foreground);
-    text-decoration: none;
-    font-size: var(--text-7);
-    transition: color var(--transition-fast);
-
-    &:hover {
-      color: var(--foreground);
-    }
-
-    /* No external arrow on nav items */
-    &::after {
-      content: none !important;
-    }
-
-    /* Active page */
-    &[aria-current="page"] {
-      color: var(--foreground);
-      font-weight: var(--font-medium);
-      text-decoration: underline;
-      text-underline-offset: 3px;
-    }
-  }
-
-  /* ─── Button outline/ghost hover → --secondary ────────── */
-  /*
-    Oat uses --_hov as the hover background on .outline/.ghost.
-    Setting it here in @layer components wins over Oat's @layer base.
-  */
-  :is(button, [type="button"], [type="submit"], a.button):is(.outline, .ghost) {
-    --_hov: rgb(from var(--muted) r g b / 0.7);
-  }
-
-  /* ─── Utilities ───────────────────────────────────────── */
-
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border-width: 0;
-  }
-}
+   Tailwind will slot its own layers after the ones declared here.
+   No conflicts, no specificity fights.
+   ──────────────────────────────────────────────────────────────────────── */

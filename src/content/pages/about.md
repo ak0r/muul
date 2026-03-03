@@ -11,7 +11,7 @@ A place for writing. The structure is intentionally simple: posts, tags, and an 
 
 ## The template
 
-Muul is built on [Astro](https://astro.build) with [Oat.ink](https://oat.ink) as the base styling layer. No Tailwind, no heavy frameworks, no build complexity. The font stack is deliberate. The colour palette is Flexoki-inspired. The theme toggle respects your system preference and remembers your choice.
+Muul is built on [Astro](https://astro.build). No Tailwind, no heavy frameworks, no build complexity. The font stack is deliberate. The colour palette is Flexoki-inspired. The theme toggle respects your system preference and remembers your choice.
 
 If you're reading this in a fork of the template, update this page. Make it yours.
 

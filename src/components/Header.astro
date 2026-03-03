@@ -27,7 +27,7 @@ function isActive(href: string): boolean {
         ))}
         <button
           id="theme-toggle"
-          class="outline theme-toggle"
+          class="theme-toggle"
           aria-label="Toggle theme"
           title="Toggle light/dark theme"
         >
@@ -44,7 +44,7 @@ function isActive(href: string): boolean {
       <!-- Mobile hamburger -->
       <button
         id="nav-toggle"
-        class="outline nav-mobile-toggle"
+        class="nav-mobile-toggle"
         aria-label="Toggle menu"
         aria-expanded="false"
         aria-controls="nav-mobile"
@@ -66,7 +66,7 @@ function isActive(href: string): boolean {
       ))}
       <button
         id="theme-toggle-mobile"
-        class="outline theme-toggle"
+        class="theme-toggle"
         aria-label="Toggle theme"
       >
         <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -76,7 +76,7 @@ function isActive(href: string): boolean {
         <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
         </svg>
-        <span>Theme</span>
+        <span class="theme-toggle-label">Theme</span>
       </button>
     </div>
   </div>
@@ -130,16 +130,12 @@ function isActive(href: string): boolean {
   .brand {
     font-family: var(--font-brand);
     font-weight: var(--font-semibold);
-    font-size: var(--text-2);
+    font-size: var(--text-2xl);
     text-decoration: none;
     color: var(--foreground);
     flex-shrink: 0;
 
-    &:hover {
-      color: rgb(from var(--foreground) r g b / 0.8);
-    }
-
-    /* No external arrow */
+    &:hover { opacity: 0.8; }
     &::after { content: none !important; }
   }
 
@@ -149,8 +145,26 @@ function isActive(href: string): boolean {
     gap: var(--space-4);
   }
 
+  /* ── Theme toggle — unstyled button, shows sun/moon icon ── */
+  .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--foreground-subtle);
+    transition: color var(--transition-fast);
+
+    &:hover { color: var(--foreground); }
+  }
+
+  .theme-toggle-label {
+    font-size: var(--text-sm);
+  }
+
   .nav-mobile-toggle {
     display: none;
+    color: var(--foreground-subtle);
+
+    &:hover { color: var(--foreground); }
   }
 
   .nav-mobile {
@@ -164,8 +178,8 @@ function isActive(href: string): boolean {
     padding-block: var(--space-3);
   }
 
-  /* Icon visibility — moon in light mode, sun in dark mode */
-  .icon-sun { display: none; }
+  /* ── Icon visibility: show moon in light, sun in dark ── */
+  .icon-sun  { display: none; }
   .icon-moon { display: block; }
 
   :global([data-theme="dark"]) .icon-sun  { display: block; }
@@ -180,7 +194,7 @@ function isActive(href: string): boolean {
   }
 
   @media (max-width: 640px) {
-    .nav-desktop    { display: none; }
+    .nav-desktop       { display: none; }
     .nav-mobile-toggle { display: inline-flex; }
   }
 </style>

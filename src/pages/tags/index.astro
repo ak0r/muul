@@ -2,10 +2,10 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import SEO from "@/components/SEO.astro";
+import PageHeader from "@/components/PageHeader.astro";
 
 const allPosts = await getCollection("posts", ({ data }) => !data.draft);
 
-// Collect all tags with post counts
 const tagMap = new Map<string, number>();
 for (const post of allPosts) {
   for (const tag of post.data.tags ?? []) {
@@ -19,12 +19,12 @@ const tags = [...tagMap.entries()].sort((a, b) => a[0].localeCompare(b[0]));
   <SEO slot="seo" title="Tags" description="Browse posts by tag" />
 
   <div class="container">
-    <h1>Tags</h1>
+    <PageHeader title="Tags" />
 
     <div class="tag-list">
       {tags.map(([tag, count]) => (
         <a href={`/tags/${tag}`}>
-          {tag} <span class="tag-count">({count}) posts</span>
+          #{tag} <span class="tag-count">({count})</span>
         </a>
       ))}
     </div>
@@ -32,10 +32,6 @@ const tags = [...tagMap.entries()].sort((a, b) => a[0].localeCompare(b[0]));
 </BaseLayout>
 
 <style>
-  h1 {
-    margin-bottom: var(--space-8);
-  }
-
   .tag-list {
     display: flex;
     flex-wrap: wrap;
@@ -43,7 +39,7 @@ const tags = [...tagMap.entries()].sort((a, b) => a[0].localeCompare(b[0]));
   }
 
   .tag-count {
-    color: var(--muted-foreground);
+    color: var(--foreground-subtle);
     font-size: 0.85em;
   }
 </style>

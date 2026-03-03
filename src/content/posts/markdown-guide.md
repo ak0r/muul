@@ -5,6 +5,8 @@ published: 2026-02-24
 tags:
   - markdown
   - muul
+series: Getting Started with Muul
+order: 2
 ---
 
 This post exists to show what the template does with words. Every element below is rendered from plain markdown — no HTML, no custom components. If something looks wrong, fix the CSS, not the content.

@@ -1,0 +1,64 @@
+/* ─── Components ───────────────────────────────────────────────────────────
+   Class-based utilities and layout primitives.
+   No element selectors here — those live in base.css.
+   ──────────────────────────────────────────────────────────────────────── */
+
+@layer components {
+
+  /* ── Layout ──────────────────────────────────────────── */
+
+  main {
+    padding-block: var(--space-14);
+  }
+
+  .container {
+    width: 100%;
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding-inline: var(--space-4);
+  }
+
+  .article {
+    max-width: var(--article-max);
+    margin-inline: auto;
+  }
+
+  /* ── Nav link ────────────────────────────────────────── */
+
+  .nav-link {
+    color: var(--foreground-subtle);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    transition: color var(--transition-fast);
+
+    &:hover {
+      color: var(--foreground);
+      opacity: 1; /* override base a:hover opacity */
+    }
+
+    &::after {
+      content: none !important; /* no external arrow */
+    }
+
+    &[aria-current="page"] {
+      color: var(--foreground);
+      font-weight: var(--font-medium);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+  }
+
+  /* ── Accessibility ───────────────────────────────────── */
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+}

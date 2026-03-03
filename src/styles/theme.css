@@ -1,36 +1,60 @@
+/* ─── Theme ────────────────────────────────────────────────────────────────
+   The one file users are expected to edit.
+   All colour values use light-dark() for automatic light/dark switching.
+   The theme toggle sets [data-theme] on <html> to override.
+
+   Token system:
+     background / background-subtle / background-minimal
+     foreground / foreground-subtle / foreground-minimal
+     border     / border-subtle     / border-minimal
+     accent     / accent-subtle     / accent-minimal
+
+   To extend with base colours (neutral, red, blue…) add them below
+   and layer semantic tokens on top.
+   ──────────────────────────────────────────────────────────────────────── */
+
 @layer theme {
   :root {
     color-scheme: light dark;
 
-    /* Flexoki-inspired palette */
-    --background:          light-dark(#FFFCF0, #100F0F);
-    --foreground:          light-dark(#100F0F, #FFFCF0);
-    --card:                light-dark(#F2F0E5, #1C1B1A);
-    --card-foreground:     light-dark(#100F0F, #CECDC3);
-    --primary:             light-dark(#DAD8CE, #343331);
-    --primary-foreground:  light-dark(#100F0F, #FFFCF0);
-    --secondary:           light-dark(#575653, #B7B5AC);
-    --secondary-foreground:light-dark(#100F0F, #FFFCF0);
-    --muted:               light-dark(#E6E4D9, #1C1B1A);
-    --muted-foreground:    light-dark(#878580, #6F6E69);
-    --faint:               light-dark(#F2F0E5, #1C1B1A);
-    --faint-foreground:    light-dark(#B7B5AC, #575653);
-    --accent:              light-dark(#24837B, #3AA99F);
-    --accent-foreground:   light-dark(#FFFCF0, #100F0F);
-    --danger:              light-dark(#AF3029, #D14D41);
-    --danger-foreground:   light-dark(#FFFCF0, #100F0F);
-    --success:             light-dark(#66800B, #879A39);
-    --success-foreground:  light-dark(#FFFCF0, #100F0F);
-    --warning:             light-dark(#BC5215, #DA702C);
-    --warning-foreground:  light-dark(#FFFCF0, #100F0F);
-    --border:              light-dark(#E6E4D9, #282726);
-    --input:               light-dark(#E6E4D9, #282726);
-    --ring:                light-dark(#575653, #B7B5AC);
+    /* ── Backgrounds ─────────────────────────────────────────
+       background        Page canvas
+       background-subtle Raised surfaces — cards, code blocks
+       background-minimal Hover states, disabled surfaces
+    ── */
+    --background:         light-dark(#FFFCF0, #100F0F);
+    --background-subtle:  light-dark(#F2F0E5, #1C1B1A);
+    --background-minimal: light-dark(#E6E4D9, #282726);
 
-    /* Typography */
-    /* --font-primary:   Georgia, 'Times New Roman', serif;
-    --font-headings:  system-ui, sans-serif;
-    --font-brand:     system-ui, sans-serif;
-    --font-code:      ui-monospace, Consolas, monospace; */
+    /* ── Foregrounds ─────────────────────────────────────────
+       foreground        Body text, headings
+       foreground-subtle Meta text — dates, read time, tags
+       foreground-minimal Disabled text, placeholders
+    ── */
+    --foreground:         light-dark(#100F0F, #FFFCF0);
+    --foreground-subtle:  light-dark(#6F6E69, #B7B5AC);
+    --foreground-minimal: light-dark(#878580, #878580);
+
+    /* ── Borders ─────────────────────────────────────────────
+       border        Default dividers and outlines
+       border-subtle Softer dividers — internal card borders
+       border-minimal Barely-there separators
+    ── */
+    --border:         light-dark(#E6E4D9, #282726);
+    --border-subtle:  light-dark(#CECDC3, #343331);
+    --border-minimal: light-dark(#DAD8CE, #403E3C);
+
+    /* ── Accent ──────────────────────────────────────────────
+       accent        Active / interactive — links, focus rings
+       accent-subtle Hover backgrounds
+       accent-minimal Light tint, selection highlight
+    ── */
+    --accent:         light-dark(#24837B, #3AA99F);
+    --accent-subtle:  light-dark(#A8D7D3, #1A5954);
+    --accent-minimal: light-dark(#D0EEEC, #0D2E2B);
   }
+
+  /* ── Theme overrides (set by toggle) ─────────────────── */
+  [data-theme="dark"]  { color-scheme: dark;  }
+  [data-theme="light"] { color-scheme: light; }
 }

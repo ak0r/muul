@@ -1,4 +1,6 @@
 ---
+import PageHeader from "@/components/PageHeader.astro";
+
 interface Props {
   title: string;
   published: Date;
@@ -15,46 +17,46 @@ const formattedDate = published.toLocaleDateString("en-US", {
 });
 ---
 
-<header class="post-header">
-  <h1>{title}</h1>
-  <div class="post-meta">
+<PageHeader {title}>
+  <div slot="meta" class="post-meta">
     <time datetime={published.toISOString()}>{formattedDate}</time>
     <span aria-hidden="true">·</span>
     <span>{readTime}</span>
+    {tags && tags.length > 0 && (
+      <span aria-hidden="true">·</span>
+      <div class="post-tags" aria-label="Tags">
+        {tags.map((tag) => (
+          <a href={`/tags/${tag}`} class="post-tag">{tag}</a>
+        ))}
+      </div>
+    )}
   </div>
-  {tags && tags.length > 0 && (
-    <div class="post-tags" aria-label="Tags">
-      {tags.map((tag) => (
-        <!-- Oat badge with outline variant — links styled as tags -->
-        <a href={`/tags/${tag}`} class="badge outline">{tag}</a>
-      ))}
-    </div>
-  )}
-</header>
+</PageHeader>
 
 <style>
-  .post-header {
-    margin-bottom: var(--space-10);
-  }
-
   .post-meta {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: var(--space-2);
-    color: var(--muted-foreground);
-    font-size: var(--text-7);
-    margin-top: var(--space-2);
-  }
-
-  /* No external arrow on badge tag links */
-  .post-tags a::after {
-    content: none !important;
   }
 
   .post-tags {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-2);
-    margin-top: var(--space-4);
+  }
+
+  .post-tag {
+    color: var(--foreground-subtle);
+    text-decoration: none;
+
+    &::before { content: "#"; }
+    &::after  { content: none !important; }
+
+    &:hover {
+      color: var(--foreground);
+      opacity: 1;
+    }
   }
 </style>

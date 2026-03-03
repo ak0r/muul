@@ -6,6 +6,48 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [0.3.1] — 2026-02-28
+
+### Changed
+- Colour token system redesigned — three roles × three tones
+- `--muted-foreground` → `--foreground-subtle`
+- `--faint` → `--background-subtle`
+- `--warning` (mark element tint) → `--accent-minimal`
+- Removed `--primary`, `--secondary`, `--card`, `--ring`, `--input`, `--danger`, `--success`, `--warning` — not needed for content sites
+- `theme.css` updated with full new palette (Flexoki tones)
+- `tokens.css` updated — colour tokens removed, now solely in `theme.css`
+- `CLAUDE.md` updated with colour token reference table
+
+---
+
+## [0.3.0] — 2026-02-28
+
+### Added
+- Custom CSS architecture replacing Oat.ink — six purpose-scoped files under `src/styles/`
+- `reset.css` — minimal browser normalisation
+- `tokens.css` — CSS custom property names and static design scale values
+- `theme.css` — full Flexoki-inspired light/dark palette using `light-dark()`
+- `base.css` — semantic element styles (no class selectors)
+- `typography.css` — prose rhythm scoped to `.post-content` only
+- `components.css` — layout utilities (`.container`, `.article`, `.nav-link`)
+- `global.css` rewritten as a pure `@layer` entry point with Tailwind hook comment
+- `CLAUDE.md` — Claude Code project reference (auto-detected)
+
+### Changed
+- Removed `@knadh/oat` dependency entirely
+- Tag links in `PostHeader` are now plain `<a>` elements with `#` prefix — no badge styling
+- Theme toggle button is unstyled — `class="theme-toggle"` scoped to `Header.astro` only
+- Mobile nav hamburger is unstyled — visual behaviour via component-scoped CSS
+- 404 "back home" is now a plain `<a>` link — no button classes
+- `about.md` and `muul-philosophy.md` updated to remove Oat references
+
+### Removed
+- `@knadh/oat` from `package.json`
+- All Oat class API usage: `.outline`, `.ghost`, `.badge`, `.button`, `--_hov` pattern
+- Oat's `button[data-variant]` attribute pattern
+
+---
+
 ## [0.2.0] — 2026-02-27
 
 ### Added

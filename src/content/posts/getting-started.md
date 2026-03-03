@@ -5,6 +5,8 @@ published: 2026-02-27
 tags:
   - muul
   - meta
+series: Getting Started with Muul
+order: 1
 ---
 
 Muul is an Astro blog template. This post walks through everything you need to get your own site up and running.
@@ -19,8 +21,8 @@ Muul is an Astro blog template. This post walks through everything you need to g
 Clone the repository and install dependencies:
 
 ```bash
-git clone https://github.com/yourusername/muul.git my-blog
-cd my-blog
+git clone https://github.com/ak0r/muul.git muul-blog
+cd muul-blog
 npm install
 npm run dev
 ```

@@ -3,7 +3,7 @@ import type { CollectionEntry } from "astro:content";
 import { getCollection } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import SEO from "@/components/SEO.astro";
-import PostHeader from "@/components/PostHeader.astro";
+import PageHeader from "@/components/PageHeader.astro";
 import SeriesNav from "@/components/SeriesNav.astro";
 import { calculateReadingTime, getRelatedPosts } from "@/utils/content.utils";
 import { siteConfig } from "@/site.config";
@@ -14,18 +14,22 @@ interface Props {
 
 const { entry } = Astro.props;
 const { title, description, published, tags, cover, series } = entry.data;
-const publishedTime = published;
 
 const allPosts = await getCollection("posts", ({ data }) => !data.draft);
 const related = getRelatedPosts(entry, allPosts, siteConfig.relatedPosts);
-const postReadTime = calculateReadingTime(entry.body ?? "").text;
+const readTime = calculateReadingTime(entry.body ?? "").text;
 
-// Series: collect and sort posts belonging to the same series
 const seriesPosts = series
   ? allPosts
       .filter((p) => p.data.series === series)
       .sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0))
   : [];
+
+const formattedDate = published.toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
 ---
 
 <BaseLayout>
@@ -34,7 +38,7 @@ const seriesPosts = series
     {title}
     description={description ?? ""}
     type="article"
-    {publishedTime}
+    publishedTime={published}
     {tags}
     image={cover}
   />
@@ -42,11 +46,23 @@ const seriesPosts = series
   <div class="container">
     <article class="article">
 
-      <PostHeader {title} {published} readTime={postReadTime} {tags} />
-
-      {seriesPosts.length > 1 && (
-        <SeriesNav current={entry} posts={seriesPosts} />
-      )}
+      <PageHeader {title}>
+        <div slot="meta" class="post-meta">
+          <time datetime={published.toISOString()}>{formattedDate}</time>
+          <span aria-hidden="true">·</span>
+          <span>{readTime}</span>
+          {tags && tags.length > 0 && (
+            <>
+              <span aria-hidden="true">·</span>
+              <div class="post-tags" aria-label="Tags">
+                {tags.map((tag) => (
+                  <a href={`/tags/${tag}`} class="post-tag">{tag}</a>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+      </PageHeader>
 
       {cover && (
         <figure class="post-cover">
@@ -57,6 +73,10 @@ const seriesPosts = series
       <section class="post-content">
         <slot />
       </section>
+      
+      {seriesPosts.length > 1 && (
+        <SeriesNav current={entry} posts={seriesPosts} />
+      )}
 
       {related.length > 0 && (
         <aside class="related-posts">
@@ -83,9 +103,35 @@ const seriesPosts = series
 </BaseLayout>
 
 <style>
+  .post-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .post-tag {
+    color: var(--foreground-subtle);
+    text-decoration: none;
+
+    &::before { content: "#"; }
+    &::after  { content: none !important; }
+
+    &:hover {
+      color: var(--foreground);
+      opacity: 1;
+    }
+  }
+
   .post-cover {
     margin-bottom: var(--space-8);
-    border-radius: var(--radius-medium);
+    border-radius: var(--radius);
     overflow: hidden;
   }
 
@@ -105,7 +151,7 @@ const seriesPosts = series
   }
 
   .related-posts h2 {
-    font-size: var(--text-4);
+    font-size: var(--text-xl);
     margin-bottom: var(--space-4);
   }
 
@@ -130,8 +176,8 @@ const seriesPosts = series
   }
 
   .related-posts time {
-    color: var(--muted-foreground);
-    font-size: var(--text-7);
+    color: var(--foreground-subtle);
+    font-size: var(--text-sm);
     white-space: nowrap;
     flex-shrink: 0;
   }

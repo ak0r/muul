@@ -70,7 +70,7 @@ const next = currentIndex < posts.length - 1 ? posts[currentIndex + 1] : null;
     font-size: var(--text-8);
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: var(--muted-foreground);
+    color: var(--foreground-subtle);
     flex-shrink: 0;
   }
 
@@ -82,7 +82,7 @@ const next = currentIndex < posts.length - 1 ? posts[currentIndex + 1] : null;
 
   .series-count {
     font-size: var(--text-8);
-    color: var(--muted-foreground);
+    color: var(--foreground-subtle);
     flex-shrink: 0;
   }
 
@@ -105,7 +105,7 @@ const next = currentIndex < posts.length - 1 ? posts[currentIndex + 1] : null;
 
     &::before {
       content: counter(series-counter) ".";
-      color: var(--muted-foreground);
+      color: var(--foreground-subtle);
       font-size: var(--text-8);
       flex-shrink: 0;
       width: 1.5rem;
@@ -129,7 +129,7 @@ const next = currentIndex < posts.length - 1 ? posts[currentIndex + 1] : null;
   }
 
   .is-current .series-item-title {
-    color: var(--muted-foreground);
+    color: var(--foreground-subtle);
     font-style: italic;
   }
 
@@ -160,7 +160,7 @@ const next = currentIndex < posts.length - 1 ? posts[currentIndex + 1] : null;
 
   .series-link-label {
     font-size: var(--text-8);
-    color: var(--muted-foreground);
+    color: var(--foreground-subtle);
   }
 
   .series-link-title {

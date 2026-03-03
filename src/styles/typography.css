@@ -1,0 +1,70 @@
+/* ─── Typography ───────────────────────────────────────────────────────────
+   Prose rhythm scoped to .post-content only.
+   Header, footer, nav are unaffected.
+   ──────────────────────────────────────────────────────────────────────── */
+
+@layer typography {
+  .post-content {
+    font-family: var(--font-secondary, var(--font-primary, Georgia, serif));
+    font-size: var(--text-lg);
+    line-height: var(--leading-relaxed);
+    color: var(--foreground);
+
+    /* ── Headings in prose ─────────────────────────────── */
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--font-headings, system-ui, sans-serif);
+    }
+
+    /* ── Paragraph spacing ─────────────────────────────── */
+    p {
+      margin-block-end: var(--space-6);
+    }
+
+    /* ── Code ──────────────────────────────────────────── */
+    code {
+      font-size: 0.85em;
+    }
+
+    pre {
+      margin-block: var(--space-6);
+    }
+
+    /* ── Block elements ────────────────────────────────── */
+    blockquote {
+      margin-block: var(--space-8);
+    }
+
+    hr {
+      margin-block: var(--space-10);
+    }
+
+    /* ── Lists ─────────────────────────────────────────── */
+    ul, ol {
+      margin-block-end: var(--space-6);
+    }
+
+    li {
+      margin-block-end: var(--space-2);
+    }
+
+    /* ── Images ────────────────────────────────────────── */
+    img {
+      border-radius: var(--radius);
+      margin-block: var(--space-6);
+    }
+
+    /* ── Tables ────────────────────────────────────────── */
+    table {
+      margin-block: var(--space-6);
+    }
+
+    /* ── First element reset ───────────────────────────── */
+    > *:first-child {
+      margin-block-start: 0;
+    }
+
+    > *:last-child {
+      margin-block-end: 0;
+    }
+  }
+}

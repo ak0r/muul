@@ -27,7 +27,7 @@ Muul is not a portfolio template. It has no project pages, no hero sections, no 
 
 It is not opinionated about your writing. The content is yours. The template only decides how it is presented.
 
-It is not dependent on a component ecosystem. Oat provides the base styling layer — ~8KB of CSS and JS. Beyond that, every override is plain CSS. No Tailwind. No utility sprawl.
+It is not dependent on any external styling library. Every line of CSS is written and owned by the template. No third-party updates will ever break your site's appearance.
 
 ## The decisions
 

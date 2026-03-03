@@ -3,13 +3,12 @@ import { getCollection } from "astro:content";
 import type { GetStaticPathsOptions } from "astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import SEO from "@/components/SEO.astro";
+import PageHeader from "@/components/PageHeader.astro";
 import { groupByYear } from "@/utils/content.utils";
 import { siteConfig } from "@/site.config";
 
-const POSTS_PER_PAGE = siteConfig.postsPerPage ?? 20;
-
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
-  const POSTS_PER_PAGE = 20;
+  const POSTS_PER_PAGE = siteConfig.postsPerPage ?? 20;
 
   const allPosts = await getCollection("posts", ({ data }) => !data.draft);
   const sorted = allPosts.sort(
@@ -23,7 +22,6 @@ const { page } = Astro.props;
 const grouped = groupByYear(page.data);
 
 const isFirst = page.currentPage === 1;
-const isLast  = page.currentPage === page.lastPage;
 ---
 
 <BaseLayout>
@@ -34,12 +32,11 @@ const isLast  = page.currentPage === page.lastPage;
   />
 
   <div class="container">
-    <header class="posts-header">
-      <h1>Articles</h1>
+    <PageHeader title="Articles">
       {page.lastPage > 1 && (
-        <span class="page-count">Page {page.currentPage} of {page.lastPage}</span>
+        <span slot="meta">Page {page.currentPage} of {page.lastPage}</span>
       )}
-    </header>
+    </PageHeader>
 
     {[...grouped.entries()].map(([year, posts]) => (
       <div class="year-group">
@@ -64,11 +61,9 @@ const isLast  = page.currentPage === page.lastPage;
         ) : (
           <span class="pagination-link is-disabled">← Newer</span>
         )}
-
         <span class="pagination-info">
           {page.currentPage} / {page.lastPage}
         </span>
-
         {page.url.next ? (
           <a href={page.url.next} class="pagination-link">Older →</a>
         ) : (
@@ -80,25 +75,12 @@ const isLast  = page.currentPage === page.lastPage;
 </BaseLayout>
 
 <style>
-  .posts-header {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: var(--space-4);
-    margin-bottom: var(--space-8);
-  }
-
-  .page-count {
-    font-size: var(--text-7);
-    color: var(--muted-foreground);
-  }
-
   .year-group {
     margin-bottom: var(--space-8);
   }
 
   .year-heading {
-    color: var(--muted-foreground);
+    color: var(--foreground-subtle);
     margin-bottom: var(--space-3);
   }
 
@@ -118,8 +100,8 @@ const isLast  = page.currentPage === page.lastPage;
   }
 
   .post-item time {
-    color: var(--muted-foreground);
-    font-size: var(--text-7);
+    color: var(--foreground-subtle);
+    font-size: var(--text-sm);
     white-space: nowrap;
   }
 
@@ -133,7 +115,7 @@ const isLast  = page.currentPage === page.lastPage;
   }
 
   .pagination-link {
-    font-size: var(--text-7);
+    font-size: var(--text-sm);
     text-decoration: none;
     color: var(--foreground);
 
@@ -142,19 +124,17 @@ const isLast  = page.currentPage === page.lastPage;
       text-underline-offset: 3px;
     }
 
-    &::after {
-      content: none !important;
-    }
+    &::after { content: none !important; }
 
     &.is-disabled {
-      color: var(--muted-foreground);
+      color: var(--foreground-subtle);
       cursor: default;
       pointer-events: none;
     }
   }
 
   .pagination-info {
-    font-size: var(--text-8);
-    color: var(--muted-foreground);
+    font-size: var(--text-xs);
+    color: var(--foreground-subtle);
   }
 </style>
