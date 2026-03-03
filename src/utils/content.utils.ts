@@ -9,15 +9,11 @@ export interface ReadingTime {
   words: number;
 }
 
-/**
- * Calculate reading time from content
- */
 export function calculateReadingTime(content: string): ReadingTime {
   if (!content || typeof content !== 'string') {
     return { text: '1 min read', minutes: 1, time: 60000, words: 0 };
   }
 
-  // Remove frontmatter and markdown syntax
   const plainText = content
     .replace(/^---\n[\s\S]*?\n---\n/, '')
     .replace(/!\[.*?\]\(.*?\)/g, '')
@@ -51,7 +47,6 @@ export function groupByYear(
     groups.get(year)!.push(post);
   }
 
-  // Sort years descending
   return new Map([...groups.entries()].sort((a, b) => b[0] - a[0]));
 }
 
@@ -63,15 +58,11 @@ export function getRelatedPosts(
   const currentTags = current.data.tags ?? [];
 
   return allPosts
-    .filter((post) => post.id !== current.id && !post.data.draft)
-    .map((post) => {
-      const sharedTags = (post.data.tags ?? []).filter((tag) =>
-        currentTags.includes(tag)
-      ).length;
-      return { post, sharedTags };
-    })
-    .filter(({ sharedTags }) => sharedTags > 0)
-    .sort((a, b) => b.sharedTags - a.sharedTags)
-    .slice(0, count)
-    .map(({ post }) => post);
+    .filter((post) =>
+      post.id !== current.id &&
+      !post.data.draft &&
+      (post.data.tags ?? []).some((tag) => currentTags.includes(tag))
+    )
+    .sort((a, b) => b.data.published.valueOf() - a.data.published.valueOf())
+    .slice(0, count);
 }

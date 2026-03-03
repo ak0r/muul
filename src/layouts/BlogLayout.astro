@@ -44,36 +44,40 @@ const formattedDate = published.toLocaleDateString("en-US", {
   />
 
   <div class="container">
-    <article class="article">
+    <div class="article">
 
-      <PageHeader {title}>
-        <div slot="meta" class="post-meta">
-          <time datetime={published.toISOString()}>{formattedDate}</time>
-          <span aria-hidden="true">·</span>
-          <span>{readTime}</span>
-          {tags && tags.length > 0 && (
-            <>
-              <span aria-hidden="true">·</span>
-              <div class="post-tags" aria-label="Tags">
-                {tags.map((tag) => (
-                  <a href={`/tags/${tag}`} class="post-tag">{tag}</a>
-                ))}
-              </div>
-            </>
-          )}
-        </div>
-      </PageHeader>
+      <!-- Only document content inside article -->
+      <article>
+        <PageHeader {title}>
+          <div slot="meta" class="post-meta">
+            <time datetime={published.toISOString()}>{formattedDate}</time>
+            <span aria-hidden="true">·</span>
+            <span>{readTime}</span>
+            {tags && tags.length > 0 && (
+              <>
+                <span aria-hidden="true">·</span>
+                <div class="post-tags" aria-label="Tags">
+                  {tags.map((tag) => (
+                    <a href={`/tags/${tag}`} class="post-tag">{tag}</a>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+        </PageHeader>
 
-      {cover && (
-        <figure class="post-cover">
-          <img src={cover} alt={title} />
-        </figure>
-      )}
+        {cover && (
+          <figure class="post-cover">
+            <img src={cover} alt={title} />
+          </figure>
+        )}
 
-      <section class="post-content">
-        <slot />
-      </section>
-      
+        <section class="post-content">
+          <slot />
+        </section>
+      </article>
+
+      <!-- Discovery: outside article, not indexed as content -->
       {seriesPosts.length > 1 && (
         <SeriesNav current={entry} posts={seriesPosts} />
       )}
@@ -98,7 +102,7 @@ const formattedDate = published.toLocaleDateString("en-US", {
         </aside>
       )}
 
-    </article>
+    </div>
   </div>
 </BaseLayout>
 

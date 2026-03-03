@@ -5,6 +5,17 @@ All notable changes to Muul will be documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
+## [0.3.2] — 2026-03-03
+
+### Added
+- `SeriesNav` is now collapsible using native `<details>`/`<summary>` — no JavaScript
+
+### Changed
+- `<article>` in `BlogLayout` now contains only `PageHeader` + `post-content` — semantic boundary for search indexing
+- `SeriesNav` and related posts moved outside `<article>` — discovery elements, not content
+- `getRelatedPosts` now sorts by date descending — tags used only to find candidates, not to rank
+
+---
 
 ## [0.3.1] — 2026-02-28
 
