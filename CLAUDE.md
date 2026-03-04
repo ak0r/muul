@@ -8,7 +8,7 @@ This file is auto-detected by Claude Code. Read it before making any changes.
 
 **Muul** (मूळ, Sanskrit: *foundation*) is a minimal personal blog template built on Astro 5.
 Philosophy: semantic HTML first, no framework dependencies, composable by design.
-Version: 0.4.0
+Version: 0.4.2
 
 ---
 
@@ -18,7 +18,7 @@ Version: 0.4.0
 muul/
 ├── public/
 │   ├── favicon.svg
-│   ├── og-default.svg          # Social share image (convert to PNG before deploy)
+│   ├── og-default.png          # Social share OG image
 │   └── rss/styles.xsl          # RSS browser stylesheet
 ├── src/
 │   ├── components/
@@ -27,6 +27,7 @@ muul/
 │   │   ├── PageHeader.astro     # Shared page header — title + optional meta slot
 │   │   ├── SeriesNav.astro     # Series ToC + prev/next (no Oat classes)
 │   │   ├── SEO.astro           # OG, Twitter, canonical meta
+│   │   ├── Search.astro        # Pagefind search UI + URL query sync
 │   │   └── ThemeInit.astro     # Inline script — prevents FOUC
 │   ├── content/
 │   │   ├── posts/              # Blog posts (.md / .mdx)
@@ -42,8 +43,7 @@ muul/
 │   │   ├── search.astro        # Pagefind search UI
 │   │   ├── rss.xml.ts
 │   │   ├── posts/
-│   │   │   ├── index.astro     # Redirects to /posts/1
-│   │   │   ├── [page].astro    # Paginated post index
+│   │   │   ├── [...page].astro # Paginated post index — page 1 at /posts
 │   │   │   └── [...slug].astro # Individual post pages
 │   │   └── tags/
 │   │       ├── index.astro     # All tags with counts
@@ -190,8 +190,9 @@ To extend with base colours (neutral, red, blue…), add them in `theme.css` bel
 1. **`ThemeInit.astro` inline script** — runs before hydration to prevent FOUC. Do not move, defer, or async it.
 2. **Theme toggle script in `Header.astro`** — reads/writes `localStorage` and `colorScheme`. The icon show/hide logic is CSS-only via `[data-theme]` attribute.
 3. **`RESERVED` array in `src/pages/[page].astro`** — must remain inside `getStaticPaths`. Moving it outside causes a runtime error in Astro 5.
-4. **`@layer` declaration in `global.css`** — layer order must be declared before any imports. Do not add styles to `global.css` directly.
-5. **`astro.config.mjs` `site` field** — must match the canonical URL used in `siteConfig.url`. Both needed for sitemap and RSS.
+4. **`src/pages/posts/[...page].astro` rest param** — do not rename back to `[page].astro`. The rest param is what makes page 1 serve at `/posts` directly without a redirect.
+5. **`@layer` declaration in `global.css`** — layer order must be declared before any imports. Do not add styles to `global.css` directly.
+6. **`astro.config.mjs` `site` field** — must match the canonical URL used in `siteConfig.url`. Both needed for sitemap and RSS.
 
 ---
 
@@ -232,7 +233,7 @@ Handled by [Expressive Code](https://expressive-code.com) via `astro-expressive-
 
 **Comments:** Add any comment system (Giscus recommended for static sites) as a component in `BlogLayout.astro`.
 
-**Search:** Pagefind integrates cleanly with Astro static builds. Add post-build script to `astro.config.mjs`.
+**Search:** Pagefind is already integrated. See the Search section above for usage notes.
 
 ---
 
@@ -245,3 +246,28 @@ order: 1
 ```
 
 `SeriesNav` renders automatically in `BlogLayout` when two or more posts share the same `series` value.
+---
+
+## Current state
+
+Version 0.4.2. Live at [muul.amitkul.in](https://muul.amitkul.in).
+
+**What is complete**
+- CSS architecture — six-file layer system, Flexoki token palette
+- All core pages — home, posts, tags, search, 404, static pages
+- Series support with collapsible `SeriesNav`
+- Pagefind static search with tag filters and URL query sync
+- Expressive Code syntax highlighting — light/dark theme sync
+- Paginated post index at `/posts` (no redirect)
+- RSS, sitemap, SEO, OG, Twitter card
+- MIT license, README, CHANGELOG, CLAUDE.md
+
+**Known gaps / next work**
+- Expressive Code uses `github-light`/`github-dark` — not yet aligned to Flexoki palette
+- `<mark>` element styled in `base.css` but no demo content in posts (highlight syntax removed from markdown-guide without replacement)
+- Draft post dev indicator — not implemented
+- Astro theme submission on hold pending Astro 6 (no timeline)
+- `ContentLayout.astro` slot-based wrapper — deferred to 0.5.0
+
+**Upcoming: Zero → Muul rewrite**
+A separate personal fork (working name: Shoonya or Pratham) will extend Muul with gallery views, richer content types, and personal site features. This work happens in a new repo — Muul itself stays minimal.
