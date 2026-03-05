@@ -61,7 +61,7 @@
     --transition:      0.2s  cubic-bezier(0.4, 0, 0.2, 1);
 
     /* ── Layout ──────────────────────────────────────────── */
-    --container-max: 960px;
-    --article-max:   680px;
+    --width-container: 960px;
+    --width-prose:   680px; /* unused in Muul — available for forks to constrain post body width */
   }
 }

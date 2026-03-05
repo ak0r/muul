@@ -1,6 +1,6 @@
 import type { CollectionEntry } from "astro:content";
 
-const WORDS_PER_MINUTE = 200;
+const DEFAULT_WORDS_PER_MINUTE = 200;
 
 export interface ReadingTime {
   text: string;
@@ -9,7 +9,16 @@ export interface ReadingTime {
   words: number;
 }
 
-export function calculateReadingTime(content: string): ReadingTime {
+/**
+ * Calculate reading time from markdown content.
+ * @param content - Raw markdown string
+ * @param wordsPerMinute - Reading speed (default 200). Adjust for non-English content,
+ *   e.g. 150 for Marathi or other Indic scripts.
+ */
+export function calculateReadingTime(
+  content: string,
+  wordsPerMinute = DEFAULT_WORDS_PER_MINUTE
+): ReadingTime {
   if (!content || typeof content !== 'string') {
     return { text: '1 min read', minutes: 1, time: 60000, words: 0 };
   }
@@ -26,7 +35,7 @@ export function calculateReadingTime(content: string): ReadingTime {
 
   const words = plainText.split(/\s+/).filter((word) => word.length > 0);
   const wordCount = words.length;
-  const minutes = Math.max(1, Math.ceil(wordCount / WORDS_PER_MINUTE));
+  const minutes = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
 
   return {
     text: `${minutes} min read`,

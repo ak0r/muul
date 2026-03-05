@@ -1,50 +1,57 @@
 ---
-import { Font } from 'astro:assets';
+
+/**
+ * BaseLayout — shared structural scaffold for all content pages.
+ *
+ * Slots:
+ *   header     — page title, meta (PageHeader)
+ *   content    — main content, wrapped in <article data-pagefind-body>
+ *   navigation — contextual navigation (SeriesNav, prev/next, breadcrumbs)
+ *   after      — supplementary content (related posts, comments)
+ *
+ * Used by BlogLayout and PageLayout. Forks can use it directly
+ * for new layout types without touching Muul's wrapper layouts.
+ */
+
+import Head from "@/components/Head.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
-import ThemeInit from "@/components/ThemeInit.astro";
-import "@/styles/global.css";
+
+interface Props {
+  lang?: string;
+}
+
+const { lang = "en" } = Astro.props;
 ---
 
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="generator" content={Astro.generator} />
-
-    <!-- Favicon -->
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="icon" href="/favicon-light.ico" type="image/x-icon" />
-    <link rel="sitemap" href="/sitemap-index.xml" />
-    <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="/rss.xml" />
-
-    <!-- SEO — injected per page -->
-    <slot name="seo" />
-
-    <!-- Additional per-page head tags -->
-    <slot name="head" />
-
-    <!-- Theme init (prevents flash) -->
-    <ThemeInit />
-
-    <!-- Fonts -->
-    <Font cssVariable="--font-headings" preload />
-    <Font cssVariable="--font-primary" preload />
-    <Font cssVariable="--font-secondary" preload />
-    <Font cssVariable="--font-code" preload />
-    <Font cssVariable="--font-brand" preload />
-  </head>
+<html lang={lang}>
+  <Head>
+    <slot name="seo" slot="seo" />
+    <slot name="head" slot="head" />
+  </Head>
   <body>
     <Header />
 
     <main>
+      <!-- Structured content layouts — container owned here -->
+      <div class="container">
+        <slot name="header" />
+
+        <article data-pagefind-body>
+          <slot name="content" />
+        </article>
+
+        <slot name="navigation" />
+        <slot name="after" />
+      </div>
+
+      <!-- Default slot — for pages that manage their own layout (index, search, 404) -->
       <slot />
     </main>
 
     <Footer />
 
-    <!-- Per-page scripts -->
     <slot name="scripts" />
   </body>
 </html>

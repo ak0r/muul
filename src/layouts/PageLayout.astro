@@ -9,16 +9,26 @@ interface Props {
 }
 
 const { entry } = Astro.props;
-const { title, description } = entry.data;
+const { title, description, updated } = entry.data;
+
+const formattedDate = updated?.toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+});
 ---
 
 <BaseLayout>
-  <SEO slot="seo" {title} {description} />
+  <SEO slot="seo" {title} description={description ?? ""} />
 
-  <div class="container">
-    <PageHeader {title} />
-    <section>
-      <slot />
-    </section>
-  </div>
+  <PageHeader slot="header" {title}>
+    {updated && (
+      <span slot="meta">Updated {formattedDate}</span>
+    )}
+  </PageHeader>
+
+  <Fragment slot="content">
+    <slot />
+  </Fragment>
+
+  <!-- navigation and after slots unused for static pages -->
 </BaseLayout>

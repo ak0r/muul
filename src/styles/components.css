@@ -13,13 +13,13 @@
 
   .container {
     width: 100%;
-    max-width: var(--container-max);
+    max-width: var(--width-container);
     margin-inline: auto;
     padding-inline: var(--space-4);
   }
 
-  .article {
-    max-width: var(--article-max);
+  .prose-wrapper {
+    max-width: var(--width-prose);
     margin-inline: auto;
   }
 

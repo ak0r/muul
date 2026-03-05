@@ -8,7 +8,7 @@ This file is auto-detected by Claude Code. Read it before making any changes.
 
 **Muul** (मूळ, Sanskrit: *foundation*) is a minimal personal blog template built on Astro 5.
 Philosophy: semantic HTML first, no framework dependencies, composable by design.
-Version: 0.4.2
+Version: 0.5.0
 
 ---
 
@@ -22,20 +22,21 @@ muul/
 │   └── rss/styles.xsl          # RSS browser stylesheet
 ├── src/
 │   ├── components/
+│   │   ├── Head.astro          # All <head> content — fonts, meta, SEO slot, ThemeInit
 │   │   ├── Header.astro        # Sticky nav + theme toggle (do not break toggle script)
 │   │   ├── Footer.astro        # Social links from siteConfig
-│   │   ├── PageHeader.astro     # Shared page header — title + optional meta slot
-│   │   ├── SeriesNav.astro     # Series ToC + prev/next (no Oat classes)
+│   │   ├── PageHeader.astro    # Shared page header — title + optional meta slot
+│   │   ├── SeriesNav.astro     # Series ToC + prev/next
 │   │   ├── SEO.astro           # OG, Twitter, canonical meta
 │   │   ├── Search.astro        # Pagefind search UI + URL query sync
-│   │   └── ThemeInit.astro     # Inline script — prevents FOUC
+│   │   └── ThemeInit.astro     # Inline script — prevents FOUC (used inside Head.astro)
 │   ├── content/
 │   │   ├── posts/              # Blog posts (.md / .mdx)
 │   │   └── pages/             # Static pages (.md / .mdx)
 │   ├── layouts/
-│   │   ├── BaseLayout.astro    # HTML shell, fonts, header, footer
-│   │   ├── BlogLayout.astro    # Wraps posts — uses PageHeader, series nav, related posts
-│   │   └── PageLayout.astro    # Wraps static pages
+│   │   ├── BaseLayout.astro    # HTML shell — uses Head, owns main with four named slots
+│   │   ├── BlogLayout.astro    # Post wrapper — fills BaseLayout slots directly
+│   │   └── PageLayout.astro    # Static page wrapper — fills BaseLayout slots directly
 │   ├── pages/
 │   │   ├── index.astro         # Home — recent posts from siteConfig.recentPosts
 │   │   ├── 404.astro
@@ -56,6 +57,11 @@ muul/
 │   │   ├── base.css            # Semantic element styles (a, h1–h6, code, table…)
 │   │   ├── typography.css      # Prose rhythm scoped to .post-content
 │   │   └── components.css      # Layout classes (.container, .article, .nav-link…)
+│   ├── schemas/
+│   │   ├── base.schema.ts      # Universal base — title, description, draft (no date)
+│   │   ├── post.schema.ts      # Extends base — published (required), cover, tags, series, order
+│   │   ├── page.schema.ts      # Extends base — updated (optional)
+│   │   └── index.ts            # Barrel export — baseSchema, postSchema, pageSchema + types
 │   ├── utils/
 │   │   ├── content.utils.ts    # groupByYear, getRelatedPosts, calculateReadingTime
 │   │   └── string.utils.ts     # slugify, humanize, titleify, truncate
@@ -187,7 +193,7 @@ To extend with base colours (neutral, red, blue…), add them in `theme.css` bel
 
 ## Critical: do not break these
 
-1. **`ThemeInit.astro` inline script** — runs before hydration to prevent FOUC. Do not move, defer, or async it.
+1. **`ThemeInit.astro` inline script** — runs inside `Head.astro` before body renders, prevents FOUC. Do not move, defer, or async it. Do not move `Head.astro` below `<body>`.
 2. **Theme toggle script in `Header.astro`** — reads/writes `localStorage` and `colorScheme`. The icon show/hide logic is CSS-only via `[data-theme]` attribute.
 3. **`RESERVED` array in `src/pages/[page].astro`** — must remain inside `getStaticPaths`. Moving it outside causes a runtime error in Astro 5.
 4. **`src/pages/posts/[...page].astro` rest param** — do not rename back to `[page].astro`. The rest param is what makes page 1 serve at `/posts` directly without a redirect.
@@ -225,6 +231,49 @@ Handled by [Expressive Code](https://expressive-code.com) via `astro-expressive-
 
 ## Extending
 
+**New layout types:** Fill `BaseLayout`'s named slots directly — use only what you need:
+
+```astro
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHeader from "@/components/PageHeader.astro";
+---
+<BaseLayout>
+  <SEO slot="seo" ... />
+  <PageHeader slot="header" {title} />
+  <Fragment slot="content">
+    <slot />
+  </Fragment>
+  <Fragment slot="navigation">
+    <!-- breadcrumbs, prev/next, etc — omit if unused -->
+  </Fragment>
+  <!-- after slot omitted — renders nothing -->
+</BaseLayout>
+```
+
+**BaseLayout slots:**
+
+| Slot | Location | Purpose | BlogLayout | PageLayout |
+|------|----------|---------|------------|------------|
+| `seo` | `<Head>` | SEO meta tags | ✓ | ✓ |
+| `head` | `<Head>` | Extra per-page head tags | — | — |
+| `header` | `<main>` | PageHeader | ✓ | ✓ |
+| `content` | `<article data-pagefind-body>` | Post/page prose | ✓ | ✓ |
+| `navigation` | `<main>` | SeriesNav, breadcrumbs | SeriesNav | — |
+| `after` | `<main>` | Related posts, comments | Related posts | — |
+| `scripts` | `<body>` end | Per-page scripts | — | — |
+| *(default)* | `<main>` | For pages bypassing named slots | — | — |
+
+**Fork schema extension:** Import `baseSchema` from `@/schemas` and extend with your own fields:
+
+```typescript
+import { baseSchema } from '@/schemas';
+export const postSchema = baseSchema.extend({
+  published: z.coerce.date(),
+  type: z.enum(['post', 'note']).default('post'),
+});
+```
+
 **UI framework:** Add Tailwind or UnoCSS — see above. Named layers in global.css prevent conflicts.
 
 **Icons:** Install any icon library (e.g. `astro-icon`) or inline SVGs. No existing icon dependency to conflict with.
@@ -250,7 +299,7 @@ order: 1
 
 ## Current state
 
-Version 0.4.2. Live at [muul.amitkul.in](https://muul.amitkul.in).
+Version 0.5.0. Live at [muul.amitkul.in](https://muul.amitkul.in).
 
 **What is complete**
 - CSS architecture — six-file layer system, Flexoki token palette
@@ -261,13 +310,17 @@ Version 0.4.2. Live at [muul.amitkul.in](https://muul.amitkul.in).
 - Paginated post index at `/posts` (no redirect)
 - RSS, sitemap, SEO, OG, Twitter card
 - MIT license, README, CHANGELOG, CLAUDE.md
+- Schema hierarchy — `baseSchema` → `postSchema` / `pageSchema` with barrel export
+- `SiteConfig`, `NavItem`, `SocialItem` types exported from `site.config.ts`
+- `Head.astro` — portable `<head>` component, owns fonts, ThemeInit, SEO slot
+- `BaseLayout` owns all named slots directly (`header`, `content`, `navigation`, `after`)
+- `BlogLayout` and `PageLayout` fill `BaseLayout` slots directly via `<Fragment>`
 
 **Known gaps / next work**
 - Expressive Code uses `github-light`/`github-dark` — not yet aligned to Flexoki palette
-- `<mark>` element styled in `base.css` but no demo content in posts (highlight syntax removed from markdown-guide without replacement)
+- `<mark>` element styled in `base.css` but no demo content in posts
 - Draft post dev indicator — not implemented
 - Astro theme submission on hold pending Astro 6 (no timeline)
-- `ContentLayout.astro` slot-based wrapper — deferred to 0.5.0
 
-**Upcoming: Zero → Muul rewrite**
-A separate personal fork (working name: Shoonya or Pratham) will extend Muul with gallery views, richer content types, and personal site features. This work happens in a new repo — Muul itself stays minimal.
+**Upcoming: Agrima fork**
+A personal fork named Agrima will extend Muul with richer content types, gallery components, and personal site features. Built as a separate repo — Muul stays minimal. Agrima uses `ContentLayout` directly for new layout types and extends `baseSchema` for additional frontmatter fields.

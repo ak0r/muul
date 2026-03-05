@@ -6,6 +6,28 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [0.5.0] — 2026-03-05
+
+### Added
+- `src/components/Head.astro` — portable `<head>` component; owns charset, viewport, favicon, fonts, ThemeInit, SEO slot, and head escape hatch slot
+- `src/schemas/base.schema.ts` — universal base schema (`title`, `description`, `draft`); no date field
+- `src/schemas/post.schema.ts` — extends base with `published` (required), `cover`, `tags`, `series`, `order`
+- `src/schemas/page.schema.ts` — extends base with `updated` (optional)
+- `src/schemas/index.ts` — barrel export for all schemas and types
+- `SiteConfig`, `NavItem`, `SocialItem` interfaces exported from `site.config.ts`
+- `PageLayout` now renders `updated` date in `PageHeader` meta slot when present
+
+### Changed
+- `BaseLayout` delegates `<head>` entirely to `Head.astro`; now owns HTML shell and `<main>` with six named slots: `seo`, `head`, `header`, `content`, `navigation`, `after`, `scripts`
+- `BlogLayout` fills `BaseLayout` slots directly via `<Fragment>` — no intermediate layout wrapper
+- `PageLayout` fills `BaseLayout` slots directly via `<Fragment>` — no intermediate layout wrapper
+- `ContentLayout.astro` removed — its slots absorbed into `BaseLayout`
+- `content.config.ts` imports `postSchema` and `pageSchema` from `@/schemas`
+- `calculateReadingTime` accepts optional `wordsPerMinute` parameter (default 200)
+- Home intro section in `index.astro` marked with `data-pagefind-ignore`
+
+---
+
 ## [0.4.2] — 2026-03-03
 
 ### Added

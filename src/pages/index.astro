@@ -1,6 +1,5 @@
 ---
-import { render } from "astro:content";
-import { getCollection, getEntry } from "astro:content";
+import { getCollection, getEntry, render } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import SEO from "@/components/SEO.astro";
 import { siteConfig } from "@/site.config";
@@ -23,7 +22,7 @@ const grouped = groupByYear(recent);
   <div class="container">
     <h1 class="sr-only">{siteConfig.title}</h1>
 
-    <section class="home-intro">
+    <section class="home-intro" data-pagefind-ignore>
       <Content />
     </section>
 
