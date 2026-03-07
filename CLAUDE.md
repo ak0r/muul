@@ -8,7 +8,7 @@ This file is auto-detected by Claude Code. Read it before making any changes.
 
 **Muul** (मूळ, Sanskrit: *foundation*) is a minimal personal blog template built on Astro 5.
 Philosophy: semantic HTML first, no framework dependencies, composable by design.
-Version: 0.5.0
+Version: 0.5.2
 
 ---
 
@@ -129,7 +129,7 @@ No conflicts — Tailwind slots after the named layers declared in global.css.
 
 ### Add a font
 1. Add the font config to `experimental.fonts` in `astro.config.mjs`
-2. Add the matching `<Font cssVariable="..." />` in `src/layouts/BaseLayout.astro`
+2. Add the matching `<Font cssVariable="..." />` in `src/components/Head.astro`
 3. Reference the CSS variable in `theme.css` comments or `base.css`
 
 ### Run dev server
@@ -322,7 +322,7 @@ order: 1
 
 ## Current state
 
-Version 0.5.0. Live at [muul.amitkul.in](https://muul.amitkul.in).
+Version 0.5.2. Live at [muul.amitkul.in](https://muul.amitkul.in).
 
 **What is complete**
 - CSS architecture — six-file layer system, Flexoki token palette
@@ -338,6 +338,8 @@ Version 0.5.0. Live at [muul.amitkul.in](https://muul.amitkul.in).
 - `Head.astro` — portable `<head>` component, owns fonts, ThemeInit, SEO slot
 - `BaseLayout` owns all named slots directly (`header`, `content`, `navigation`, `after`)
 - `BlogLayout` and `PageLayout` fill `BaseLayout` slots directly via `<Fragment>`
+- All collection queries centralised in `content.utils.ts` — draft filtering consistent across all queries
+- Expressive Code uses Everforest theme, tied to `data-theme` via `themeCssSelector`
 
 **Known gaps / next work**
 - `<mark>` element styled in `base.css` but no demo content in posts
@@ -345,4 +347,4 @@ Version 0.5.0. Live at [muul.amitkul.in](https://muul.amitkul.in).
 - Astro theme submission on hold pending Astro 6 (no timeline)
 
 **Upcoming: Agrima fork**
-A personal fork named Agrima will extend Muul with richer content types, gallery components, and personal site features. Built as a separate repo — Muul stays minimal. Agrima uses `ContentLayout` directly for new layout types and extends `baseSchema` for additional frontmatter fields.
+A personal fork named Agrima will extend Muul with richer content types, gallery components, and personal site features. Built as a separate repo — Muul stays minimal. Agrima fills `BaseLayout` slots directly for new layout types and extends `baseSchema` for additional frontmatter fields.
