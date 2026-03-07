@@ -220,8 +220,12 @@ To extend with base colours (neutral, red, blue…), add them in `theme.css` bel
 Handled by [Expressive Code](https://expressive-code.com) via `astro-expressive-code`.
 
 - Configured in `astro.config.mjs` under `expressiveCode({})`
-- Uses `github-light` / `github-dark` themes — swap to any Shiki-compatible theme
-- Switches automatically with `[data-theme]` attribute set by the toggle
+- Uses `everforest-light` / `everforest-dark` themes — warm, muted palette closest to Flexoki
+- Theme switching tied to Muul's `data-theme` attribute via `themeCssSelector`:
+  ```js
+  themeCssSelector: (theme) =>
+    theme.name === 'everforest-dark' ? '[data-theme="dark"]' : '[data-theme="light"]'
+  ```
 - Style overrides use Muul's CSS tokens (`--border`, `--radius`, `--font-code`)
 - Supports: copy button, line numbers (`showLineNumbers`), line marking, file name frames, terminal frames
 - To add line numbers to a block: ` ```js showLineNumbers `
@@ -317,7 +321,6 @@ Version 0.5.0. Live at [muul.amitkul.in](https://muul.amitkul.in).
 - `BlogLayout` and `PageLayout` fill `BaseLayout` slots directly via `<Fragment>`
 
 **Known gaps / next work**
-- Expressive Code uses `github-light`/`github-dark` — not yet aligned to Flexoki palette
 - `<mark>` element styled in `base.css` but no demo content in posts
 - Draft post dev indicator — not implemented
 - Astro theme submission on hold pending Astro 6 (no timeline)

@@ -60,6 +60,8 @@ export default defineConfig({
     expressiveCode({
       // Matches your data-theme attribute toggle
       themes: ['everforest-dark', 'everforest-light'],
+      themeCssSelector: (theme) => 
+        theme.name === 'everforest-dark' ? '[data-theme="dark"]' : '[data-theme="light"]',
       styleOverrides: {
         // Tie into Muul's token system
         borderRadius: 'var(--radius)',

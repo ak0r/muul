@@ -6,6 +6,14 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [0.5.1] — 2026-03-07
+
+### Fixed
+- Expressive Code theme switching now correctly responds to Muul's `data-theme` attribute via `themeCssSelector` in `astro.config.mjs`
+- Switched from `github-light`/`github-dark` to `everforest-light`/`everforest-dark` — warmer palette, closer to Flexoki
+
+---
+
 ## [0.5.0] — 2026-03-05
 
 ### Added
