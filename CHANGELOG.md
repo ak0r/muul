@@ -6,6 +6,26 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [0.5.2] — 2026-03-07
+
+### Added
+- `content.utils.ts` — all collection queries now centralised:
+  - `getPublishedPosts()` — all posts sorted date desc
+  - `getPost(id)` — single post by id
+  - `getPublishedPages()` — all pages
+  - `getPostsByYear()` — posts grouped by year descending
+  - `getPostsByTag(tag)` — posts filtered by tag
+  - `getAllTags()` — tag → count map sorted by count
+  - `getSeriesPosts(series)` — series posts sorted by order
+- Draft filtering consistent across all queries — visible in dev, excluded in prod
+- `getRelatedPosts` fallback to recent posts when tag matches are insufficient
+
+### Changed
+- `BlogLayout` uses `getPublishedPosts`, `getSeriesPosts`, `getRelatedPosts` from utils — no inline `getCollection` calls
+- Pages should import all collection queries from `@/utils/content.utils` — never call `getCollection` directly
+
+---
+
 ## [0.5.1] — 2026-03-07
 
 ### Fixed

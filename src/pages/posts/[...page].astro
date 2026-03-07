@@ -1,21 +1,19 @@
 ---
-import { getCollection } from "astro:content";
 import type { GetStaticPathsOptions } from "astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import SEO from "@/components/SEO.astro";
 import PageHeader from "@/components/PageHeader.astro";
-import { groupByYear } from "@/utils/content.utils";
+import {
+  getPublishedPosts,
+  groupByYear
+} from "@/utils/content.utils";
 import { siteConfig } from "@/site.config";
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
   const POSTS_PER_PAGE = siteConfig.postsPerPage ?? 20;
 
-  const allPosts = await getCollection("posts", ({ data }) => !data.draft);
-  const sorted = allPosts.sort(
-    (a, b) => b.data.published.valueOf() - a.data.published.valueOf()
-  );
-
-  return paginate(sorted, { pageSize: POSTS_PER_PAGE });
+  const allPosts = await getPublishedPosts();
+  return paginate(allPosts, { pageSize: POSTS_PER_PAGE });
 }
 
 const { page } = Astro.props;

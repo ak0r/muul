@@ -63,7 +63,7 @@ muul/
 │   │   ├── page.schema.ts      # Extends base — updated (optional)
 │   │   └── index.ts            # Barrel export — baseSchema, postSchema, pageSchema + types
 │   ├── utils/
-│   │   ├── content.utils.ts    # groupByYear, getRelatedPosts, calculateReadingTime
+│   │   ├── content.utils.ts    # all collection queries + draft filtering + reading time
 │   │   └── string.utils.ts     # slugify, humanize, titleify, truncate
 │   ├── content.config.ts       # Collection schemas (posts, pages)
 │   └── site.config.ts          # All site-wide settings — edit this first
@@ -77,6 +77,25 @@ muul/
 ---
 
 ## Common tasks
+
+### Query posts in pages
+
+Always use `content.utils.ts` functions — never call `getCollection` directly in pages:
+
+```typescript
+import {
+  getPublishedPosts,   // all posts, date desc, drafts excluded in prod
+  getPost,             // single post by id
+  getPublishedPages,   // all pages
+  getPostsByYear,      // posts grouped by year
+  getPostsByTag,       // posts filtered by tag
+  getAllTags,           // tag → count map, sorted by count
+  getSeriesPosts,      // series posts sorted by order
+  getRelatedPosts,     // related by tags, fallback to recent
+} from "@/utils/content.utils";
+```
+
+Draft behaviour: visible in dev (`import.meta.env.DEV`), excluded in prod builds.
 
 ### Add a post
 Create `src/content/posts/my-post.md` with required frontmatter:
@@ -322,7 +341,7 @@ Version 0.5.0. Live at [muul.amitkul.in](https://muul.amitkul.in).
 
 **Known gaps / next work**
 - `<mark>` element styled in `base.css` but no demo content in posts
-- Draft post dev indicator — not implemented
+- Draft post visual indicator in dev mode — not implemented (drafts are queryable in dev, just not visually marked)
 - Astro theme submission on hold pending Astro 6 (no timeline)
 
 **Upcoming: Agrima fork**

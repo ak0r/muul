@@ -3,16 +3,16 @@ import { getCollection, getEntry, render } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import SEO from "@/components/SEO.astro";
 import { siteConfig } from "@/site.config";
-import { groupByYear } from "@/utils/content.utils";
+import {
+  getPublishedPosts,
+  groupByYear
+} from "@/utils/content.utils";
 
 const homeEntry = await getEntry("pages", "home");
 const { Content } = await render(homeEntry);
 
-const allPosts = await getCollection("posts", ({ data }) => !data.draft);
-const sorted = allPosts.sort(
-  (a, b) => b.data.published.valueOf() - a.data.published.valueOf()
-);
-const recent = sorted.slice(0, siteConfig.recentPosts);
+const allPosts = await getPublishedPosts();
+const recent = allPosts.slice(0, siteConfig.recentPosts);
 const grouped = groupByYear(recent);
 ---
 

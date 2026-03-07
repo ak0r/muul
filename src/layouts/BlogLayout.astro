@@ -1,11 +1,15 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import { getCollection } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import SEO from "@/components/SEO.astro";
 import PageHeader from "@/components/PageHeader.astro";
 import SeriesNav from "@/components/SeriesNav.astro";
-import { calculateReadingTime, getRelatedPosts } from "@/utils/content.utils";
+import {
+  getPublishedPosts,
+  getSeriesPosts,
+  getRelatedPosts,
+  calculateReadingTime,
+} from "@/utils/content.utils";
 import { siteConfig } from "@/site.config";
 
 interface Props {
@@ -15,15 +19,10 @@ interface Props {
 const { entry } = Astro.props;
 const { title, description, published, tags, cover, series } = entry.data;
 
-const allPosts = await getCollection("posts", ({ data }) => !data.draft);
+const allPosts = await getPublishedPosts();
 const related = getRelatedPosts(entry, allPosts, siteConfig.relatedPosts);
+const seriesPosts = series ? await getSeriesPosts(series) : [];
 const readTime = calculateReadingTime(entry.body ?? "").text;
-
-const seriesPosts = series
-  ? allPosts
-      .filter((p) => p.data.series === series)
-      .sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0))
-  : [];
 
 const formattedDate = published.toLocaleDateString("en-US", {
   year: "numeric",
@@ -62,7 +61,6 @@ const formattedDate = published.toLocaleDateString("en-US", {
   </PageHeader>
 
   <Fragment slot="content">
-    <!-- Pagefind metadata — indexed alongside post prose -->
     <meta data-pagefind-meta="title[content]" content={title} />
     <meta data-pagefind-sort="date[content]" content={published.toISOString()} />
     <meta data-pagefind-filter="collection[content]" content="posts" />
