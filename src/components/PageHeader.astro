@@ -1,13 +1,14 @@
 ---
 interface Props {
   title: string;
+  pagefind?: boolean;
 }
 
-const { title } = Astro.props;
+const { title, pagefind = false } = Astro.props;
 ---
 
 <header class="page-header">
-  <h1>{title}</h1>
+  <h1 data-pagefind-meta={pagefind ? "title" : ""}>{title}</h1>
   {Astro.slots.has('meta') && (
     <div class="page-header-meta">
       <slot name="meta" />

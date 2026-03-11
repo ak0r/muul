@@ -6,6 +6,44 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [0.6.0] — 2026-03-11
+
+### Added
+- `PostMeta.astro` — shared date/read-time/tags primitive; auto-selects short (list) vs full (post) date format based on props; default slot for fork extensions
+- `PostItem.astro` — single post row — title + PostMeta in date-only mode
+- `PostList.astro` — year-grouped post list — accepts flat array, owns `groupByYear` internally
+- `Tag.astro` — single tag link with optional count
+- `TagList.astro` — tag cloud with counts for `tags/index.astro`
+- `Pagination.astro` — prev/next controls for paginated routes; renders nothing when `lastPage <= 1`
+- `ordinalSuffix()` added to `string.utils.ts` — e.g. `1 → "1st"`, `11 → "11th"`
+- `PageHeader` now accepts a `pagefind` boolean prop — adds `data-pagefind-meta="title"` to `<h1>` when true; only set in `BlogLayout` so post titles are indexed correctly
+- Content Security Policy configured via `security.contentSecurityPolicy` in `astro.config.mjs` — `script-src self`, `style-src self unsafe-inline`, `connect-src self`, `worker-src self blob:`
+
+### Changed
+- Upgraded to Astro 6.0 — Vite 7, Zod 4, Node 22 required
+- All schema files now import `z` from `astro/zod` instead of `astro:content`
+- `fonts` array moved from `experimental.fonts` to top-level — Fonts API stable in Astro 6
+- Expressive Code themes updated to `everforest-light` / `everforest-dark` with `themeCssSelector` tied to `data-theme`
+- `BlogLayout` uses `PostMeta` for post header meta — inline date/tag markup removed
+- `BlogLayout` uses `PostItem` for related posts list — consistent row layout site-wide
+- `BlogLayout` pagefind sort/filter `<meta>` tags moved to `head` slot — outside `data-pagefind-body` so they are read as metadata, not indexed as content
+- `index.astro` uses `PostList` — inline year-grouping and list markup removed
+- `posts/[...page].astro` uses `PostList` + `Pagination` — inline markup removed
+- `tags/[tag].astro` uses `PostList` — inline markup and styles removed; title simplified to `#${tag}`
+- `tags/index.astro` uses `TagList` and `getAllTags()` from content.utils — inline tag map removed
+- Added `.nvmrc` with Node `22.12.0`
+- `string.utils.ts` trimmed to `ordinalSuffix` only — all other functions removed; forks add what they need
+
+### Fixed
+- Search replaced `@astro/pagefind` integration (incompatible with Astro 6) with direct load of `/pagefind/pagefind-ui.js` via `is:inline` script; `PagefindUI` mounted from `window` object, bypassing Vite bundling entirely
+- Pagefind CSS loaded via `<link href="/pagefind/pagefind-ui.css">` — avoids broken build-time import
+- Post titles now correctly indexed by Pagefind via `data-pagefind-meta="title"` on `<h1>` in `PageHeader`
+- Build script updated to `astro build && pagefind --site dist`
+- `PostHeader.astro` removed — superseded by `PageHeader` + `PostMeta`
+- Pagefind sort/filter `<meta>` tags moved back to `content` slot — `head` slot unused, removed from `BlogLayout`
+
+---
+
 ## [0.5.2] — 2026-03-07
 
 ### Added

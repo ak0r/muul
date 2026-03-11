@@ -3,6 +3,8 @@ import type { CollectionEntry } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import SEO from "@/components/SEO.astro";
 import PageHeader from "@/components/PageHeader.astro";
+import PostMeta from "@/components/PostMeta.astro";
+import PostItem from "@/components/PostItem.astro";
 import SeriesNav from "@/components/SeriesNav.astro";
 import {
   getPublishedPosts,
@@ -23,12 +25,6 @@ const allPosts = await getPublishedPosts();
 const related = getRelatedPosts(entry, allPosts, siteConfig.relatedPosts);
 const seriesPosts = series ? await getSeriesPosts(series) : [];
 const readTime = calculateReadingTime(entry.body ?? "").text;
-
-const formattedDate = published.toLocaleDateString("en-US", {
-  year: "numeric",
-  month: "long",
-  day: "numeric",
-});
 ---
 
 <BaseLayout>
@@ -42,32 +38,16 @@ const formattedDate = published.toLocaleDateString("en-US", {
     image={cover}
   />
 
-  <PageHeader slot="header" {title}>
-    <div slot="meta" class="post-meta">
-      <time datetime={published.toISOString()}>{formattedDate}</time>
-      <span aria-hidden="true">·</span>
-      <span>{readTime}</span>
-      {tags && tags.length > 0 && (
-        <>
-          <span aria-hidden="true">·</span>
-          <div class="post-tags" aria-label="Tags">
-            {tags.map((tag) => (
-              <a href={`/tags/${tag}`} class="post-tag">{tag}</a>
-            ))}
-          </div>
-        </>
-      )}
-    </div>
+  <PageHeader slot="header" {title} pagefind>
+    <PostMeta slot="meta" {published} {readTime} {tags} />
   </PageHeader>
 
   <Fragment slot="content">
-    <meta data-pagefind-meta="title[content]" content={title} />
     <meta data-pagefind-sort="date[content]" content={published.toISOString()} />
     <meta data-pagefind-filter="collection[content]" content="posts" />
     {tags && tags.map((tag) => (
       <meta data-pagefind-filter="tag[content]" content={tag} />
     ))}
-
     {cover && (
       <figure class="post-cover">
         <img src={cover} alt={title} />
@@ -89,18 +69,9 @@ const formattedDate = published.toLocaleDateString("en-US", {
     {related.length > 0 && (
       <aside class="related-posts">
         <h2>Related</h2>
-        <ul>
+        <ul class="related-list">
           {related.map((post) => (
-            <li>
-              <a href={`/posts/${post.id}`}>{post.data.title}</a>
-              <time datetime={post.data.published.toISOString()}>
-                {post.data.published.toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "short",
-                  day: "numeric",
-                })}
-              </time>
-            </li>
+            <PostItem {post} />
           ))}
         </ul>
       </aside>
@@ -109,32 +80,6 @@ const formattedDate = published.toLocaleDateString("en-US", {
 </BaseLayout>
 
 <style>
-  .post-meta {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-  }
-
-  .post-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-  }
-
-  .post-tag {
-    color: var(--foreground-subtle);
-    text-decoration: none;
-
-    &::before { content: "#"; }
-    &::after  { content: none !important; }
-
-    &:hover {
-      color: var(--foreground);
-      opacity: 1;
-    }
-  }
-
   .post-cover {
     margin-bottom: var(--space-8);
     border-radius: var(--radius);
@@ -161,30 +106,11 @@ const formattedDate = published.toLocaleDateString("en-US", {
     margin-bottom: var(--space-4);
   }
 
-  .related-posts ul {
+  .related-list {
     list-style: none;
     padding: 0;
-    margin: 0;
     display: flex;
     flex-direction: column;
     gap: var(--space-3);
-  }
-
-  .related-posts li {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: var(--space-4);
-  }
-
-  .related-posts a::after {
-    content: none !important;
-  }
-
-  .related-posts time {
-    color: var(--foreground-subtle);
-    font-size: var(--text-sm);
-    white-space: nowrap;
-    flex-shrink: 0;
   }
 </style>

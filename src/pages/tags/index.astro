@@ -2,18 +2,11 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import SEO from "@/components/SEO.astro";
 import PageHeader from "@/components/PageHeader.astro";
-import {
-  getPublishedPosts,
-} from "@/utils/content.utils";
+import TagList from "@/components/TagList.astro";
+import { getAllTags } from "@/utils/content.utils";
 
-const allPosts = await getPublishedPosts();
-
-const tagMap = new Map<string, number>();
-for (const post of allPosts) {
-  for (const tag of post.data.tags ?? []) {
-    tagMap.set(tag, (tagMap.get(tag) ?? 0) + 1);
-  }
-}
+// getAllTags returns Map sorted by count desc — sort alphabetically for index
+const tagMap = await getAllTags();
 const tags = [...tagMap.entries()].sort((a, b) => a[0].localeCompare(b[0]));
 ---
 
@@ -22,26 +15,6 @@ const tags = [...tagMap.entries()].sort((a, b) => a[0].localeCompare(b[0]));
 
   <div class="container">
     <PageHeader title="Tags" />
-
-    <div class="tag-list">
-      {tags.map(([tag, count]) => (
-        <a href={`/tags/${tag}`}>
-          #{tag} <span class="tag-count">({count})</span>
-        </a>
-      ))}
-    </div>
+    <TagList {tags} />
   </div>
 </BaseLayout>
-
-<style>
-  .tag-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-3);
-  }
-
-  .tag-count {
-    color: var(--foreground-subtle);
-    font-size: 0.85em;
-  }
-</style>

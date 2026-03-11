@@ -1,74 +1,60 @@
 ---
-import { join } from "node:path";
-import "@pagefind/default-ui/css/ui.css";
-
-const bundlePath = join(import.meta.env.BASE_URL, "pagefind/");
+/**
+ * Search — Pagefind UI loaded directly from /pagefind/ static assets.
+ *
+ * Both the UI script and CSS come from /pagefind/ (copied to public/ at build).
+ * is:inline loads pagefind-ui.js as a classic browser script, putting
+ * PagefindUI on window — bypasses Vite bundling entirely.
+ */
 ---
 
-<div
-  data-pagefind-ui
-  data-bundle-path={bundlePath}
-  class="search-wrap"
-></div>
+<link rel="stylesheet" href="/pagefind/pagefind-ui.css" />
+<script is:inline src="/pagefind/pagefind-ui.js"></script>
 
-<script>
-  import { PagefindUI } from "@pagefind/default-ui";
+<div id="pagefind-search" data-pagefind-ui></div>
 
-  window.addEventListener("DOMContentLoaded", () => {
-    const allSelector = "[data-pagefind-ui]";
+<script is:inline>
+window.addEventListener("DOMContentLoaded", () => {
+  const container = document.querySelector("#pagefind-search");
+  if (!container || container.dataset.initialized) return;
+  container.dataset.initialized = "true";
 
-    for (const el of document.querySelectorAll(allSelector)) {
-      const elSelector = [
-        ...(el.id ? [`#${el.id}`] : []),
-        ...[...el.classList.values()].map((c) => `.${c}`),
-        allSelector,
-      ].join("");
+  const params = new URLSearchParams(window.location.search);
 
-      const bundlePath = el.getAttribute("data-bundle-path");
+  const search = new PagefindUI({
+    element: "#pagefind-search",
+    bundlePath: "/pagefind/",
+    showImages: false,
+    showSubResults: true,
+    processTerm(term) {
+      if (term) params.set("q", term);
+      else params.delete("q");
 
-      new PagefindUI({
-        element: elSelector,
-        bundlePath,
-        showImages: false,
-        debounceTimeoutMs: 100,
-        resetStyles: true,
-        excerptLength: 25,
-      });
-
-      const input = el.querySelector("input[type=\"text\"]");
-      input?.focus();
-
-      // Restore query from URL on load
-      const params = new URLSearchParams(window.location.search);
-      const query = params.get("q");
-      if (query && input) {
-        input.value = query;
-        input.dispatchEvent(new Event("input", { bubbles: true }));
-      }
-
-      // Sync query to URL as user types
-      input?.addEventListener("input", (e) => {
-        const val = e.target.value;
-        const url = new URL(window.location.href);
-        const params = new URLSearchParams(url.search);
-        if (val) {
-          params.set("q", val);
-        } else {
-          params.delete("q");
-        }
-        window.history.replaceState({}, "", `${url.pathname}${params.size ? "?" + params : ""}`);
-      });
+      const qs = params.toString();
+      history.replaceState(history.state, "", qs ? `?${qs}` : location.pathname);
+      return term;
     }
   });
+
+  // Restore query from URL
+  const query = params.get("q");
+  if (query) search.triggerSearch(query);
+
+  // Clear URL when search cleared
+  container.addEventListener("input", (e) => {
+    if (
+      e.target.classList?.contains("pagefind-ui__search-input") &&
+      e.target.value.trim() === ""
+    ) {
+      history.replaceState(history.state, "", location.pathname);
+    }
+  });
+});
 </script>
 
 <style>
-  .search-wrap {
-    max-width: var(--width-prose);
-  }
-
-  /* Pagefind UI token overrides */
   [data-pagefind-ui] {
+    max-width: var(--width-prose);
     --pagefind-ui-scale: 0.9;
     --pagefind-ui-primary:       var(--accent);
     --pagefind-ui-text:          var(--foreground);

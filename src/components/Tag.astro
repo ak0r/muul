@@ -1,0 +1,48 @@
+---
+/**
+ * Tag — a single tag rendered as a link.
+ *
+ * With count:    #muul (3)
+ * Without count: #muul
+ *
+ * Used by TagList. Can also be used inline wherever a tag link is needed.
+ */
+
+interface Props {
+  tag: string;
+  count?: number;
+}
+
+const { tag, count } = Astro.props;
+---
+
+<a href={`/tags/${tag}`} class="tag">
+  <span class="tag-name">#{tag}</span>
+  {count !== undefined && (
+    <span class="tag-count">({count})</span>
+  )}
+</a>
+
+<style>
+  .tag {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--space-1);
+    color: var(--foreground-subtle);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    transition: color var(--transition-fast);
+
+    &::after { content: none !important; }
+
+    &:hover {
+      color: var(--foreground);
+      opacity: 1;
+    }
+  }
+
+  .tag-count {
+    font-size: 0.85em;
+    color: var(--foreground-minimal);
+  }
+</style>

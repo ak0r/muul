@@ -1,19 +1,16 @@
 ---
-import { getCollection, getEntry, render } from "astro:content";
+import { getEntry, render } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import SEO from "@/components/SEO.astro";
+import PostList from "@/components/PostList.astro";
 import { siteConfig } from "@/site.config";
-import {
-  getPublishedPosts,
-  groupByYear
-} from "@/utils/content.utils";
+import { getPublishedPosts } from "@/utils/content.utils";
 
 const homeEntry = await getEntry("pages", "home");
 const { Content } = await render(homeEntry);
 
 const allPosts = await getPublishedPosts();
 const recent = allPosts.slice(0, siteConfig.recentPosts);
-const grouped = groupByYear(recent);
 ---
 
 <BaseLayout>
@@ -27,22 +24,8 @@ const grouped = groupByYear(recent);
     </section>
 
     <section class="home-posts">
-      <h2>Recent Posts</h2>
-      {[...grouped.entries()].map(([year, posts]) => (
-        <div class="year-group">
-          <h3 class="year-heading">{year}</h3>
-          <ul class="post-list">
-            {posts.map((post) => (
-              <li class="post-item">
-                <a href={`/posts/${post.id}`}>{post.data.title}</a>
-                <time datetime={post.data.published.toISOString()}>
-                  {post.data.published.toLocaleDateString("en-US", { month: "short", day: "numeric" })}
-                </time>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
+      <h2 class="home-posts-heading">Recent</h2>
+      <PostList posts={recent} />
     </section>
   </div>
 </BaseLayout>
@@ -52,37 +35,14 @@ const grouped = groupByYear(recent);
     margin-bottom: var(--space-12);
   }
 
-  .home-posts h2 {
+  .home-posts-heading {
+    font-size: var(--text-base);
+    font-weight: var(--font-medium);
+    color: var(--foreground-subtle);
     margin-bottom: var(--space-6);
-  }
-
-  .year-group {
-    margin-bottom: var(--space-8);
-  }
-
-  .year-heading {
-    color: var(--foreground-subtle);
-    margin-bottom: var(--space-3);
-  }
-
-  .post-list {
-    list-style: none;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
-  }
-
-  .post-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: var(--space-4);
-  }
-
-  .post-item time {
-    color: var(--foreground-subtle);
-    font-size: 0.85rem;
-    white-space: nowrap;
+    margin-block-start: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: var(--text-xs);
   }
 </style>

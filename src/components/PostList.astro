@@ -1,0 +1,56 @@
+---
+/**
+ * PostList — groups a flat post array by year and renders them.
+ *
+ * Accepts a flat array — grouping is handled internally.
+ * Pages pass their already-fetched posts; no querying happens here.
+ *
+ * Used by: index.astro, posts/[...page].astro, tags/[tag].astro
+ */
+import type { CollectionEntry } from "astro:content";
+import PostItem from "@/components/PostItem.astro";
+import { groupByYear } from "@/utils/content.utils";
+
+interface Props {
+  posts: CollectionEntry<"posts">[];
+}
+
+const { posts } = Astro.props;
+const grouped = groupByYear(posts);
+---
+
+<div class="post-list-root">
+  {[...grouped.entries()].map(([year, yearPosts]) => (
+    <div class="year-group">
+      <h2 class="year-heading">{year}</h2>
+      <ul class="post-list">
+        {yearPosts.map((post) => (
+          <PostItem {post} />
+        ))}
+      </ul>
+    </div>
+  ))}
+</div>
+
+<style>
+  .year-group {
+    margin-bottom: var(--space-8);
+  }
+
+  .year-heading {
+    font-size: var(--text-base);
+    font-weight: var(--font-medium);
+    color: var(--foreground-subtle);
+    margin-bottom: var(--space-3);
+    /* Override base h2 margin */
+    margin-block-start: 0;
+  }
+
+  .post-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+</style>

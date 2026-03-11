@@ -1,22 +1,25 @@
 {
   "name": "muul",
   "type": "module",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "license": "MIT",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build && npx pagefind --site dist && cp -r dist/pagefind public/",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "version:patch": "npm version patch",
+    "version:minor": "npm version minor",
+    "push:release": "git push && git push --tags"
   },
   "dependencies": {
-    "@astrojs/mdx": "^4.3.13",
-    "@astrojs/rss": "^4.0.15",
-    "@astrojs/sitemap": "^3.7.0",
+    "@astrojs/compiler-rs": "^0.1.4",
+    "@astrojs/mdx": "^5.0.0",
+    "@astrojs/rss": "^4.0.17",
+    "@astrojs/sitemap": "^3.7.1",
     "@pagefind/default-ui": "^1.4.0",
-    "astro": "^5.17.1",
+    "astro": "^6.0.2",
     "astro-expressive-code": "^0.41.7",
-    "astro-pagefind": "^1.8.5",
     "pagefind": "^1.4.0"
   }
 }
