@@ -1,6 +1,5 @@
 ---
-width: full
-updated_at: 2026-03-24T16:50:48.771Z
+updated_at: 2026-03-24T16:50:51.457Z
 ---
 
 # new test
